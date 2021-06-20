@@ -28,7 +28,7 @@ import io.netty.util.ReferenceCountUtil;
 
 import org.apache.bookkeeper.util.ByteBufList;
 import org.apache.bookkeeper.proto.BookkeeperProtocol.AuthMessage;
-import org.apache.bookkeeper.proto.BookkeeperProtocol
+import org.apache.bookkeeper.proto.BookkeeperProtocol;
 
 
 /**
