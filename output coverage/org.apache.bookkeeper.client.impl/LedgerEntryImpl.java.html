@@ -32,19 +32,19 @@ import org.apache.bookkeeper.client.api.LedgerEntry;
  */
 public class LedgerEntryImpl implements LedgerEntry {
 
-<span class="nc" id="L35">    private static final Recycler&lt;LedgerEntryImpl&gt; RECYCLER = new Recycler&lt;LedgerEntryImpl&gt;() {</span>
+<span class="fc" id="L35">    private static final Recycler&lt;LedgerEntryImpl&gt; RECYCLER = new Recycler&lt;LedgerEntryImpl&gt;() {</span>
         @Override
         protected LedgerEntryImpl newObject(Handle&lt;LedgerEntryImpl&gt; handle) {
-<span class="nc" id="L38">            return new LedgerEntryImpl(handle);</span>
+<span class="fc" id="L38">            return new LedgerEntryImpl(handle);</span>
         }
     };
 
     public static LedgerEntryImpl create(long ledgerId,
                                          long entryId) {
-<span class="nc" id="L44">        LedgerEntryImpl entry = RECYCLER.get();</span>
-<span class="nc" id="L45">        entry.ledgerId = ledgerId;</span>
-<span class="nc" id="L46">        entry.entryId = entryId;</span>
-<span class="nc" id="L47">        return entry;</span>
+<span class="fc" id="L44">        LedgerEntryImpl entry = RECYCLER.get();</span>
+<span class="fc" id="L45">        entry.ledgerId = ledgerId;</span>
+<span class="fc" id="L46">        entry.entryId = entryId;</span>
+<span class="fc" id="L47">        return entry;</span>
     }
 
     public static LedgerEntryImpl create(long ledgerId,
@@ -73,9 +73,9 @@ public class LedgerEntryImpl implements LedgerEntry {
     private long length;
     private ByteBuf entryBuf;
 
-<span class="nc" id="L76">    private LedgerEntryImpl(Handle&lt;LedgerEntryImpl&gt; handle) {</span>
-<span class="nc" id="L77">        this.recycleHandle = handle;</span>
-<span class="nc" id="L78">    }</span>
+<span class="fc" id="L76">    private LedgerEntryImpl(Handle&lt;LedgerEntryImpl&gt; handle) {</span>
+<span class="fc" id="L77">        this.recycleHandle = handle;</span>
+<span class="fc" id="L78">    }</span>
 
     public void setEntryId(long entryId) {
 <span class="nc" id="L81">        this.entryId = entryId;</span>
@@ -151,16 +151,16 @@ public class LedgerEntryImpl implements LedgerEntry {
      */
     @Override
     public void close() {
-<span class="nc" id="L154">        recycle();</span>
-<span class="nc" id="L155">    }</span>
+<span class="fc" id="L154">        recycle();</span>
+<span class="fc" id="L155">    }</span>
 
     private void recycle() {
-<span class="nc" id="L158">        this.ledgerId = -1L;</span>
-<span class="nc" id="L159">        this.entryId = -1L;</span>
-<span class="nc" id="L160">        this.length = -1L;</span>
-<span class="nc" id="L161">        ReferenceCountUtil.release(entryBuf);</span>
-<span class="nc" id="L162">        this.entryBuf = null;</span>
-<span class="nc" id="L163">        recycleHandle.recycle(this);</span>
-<span class="nc" id="L164">    }</span>
+<span class="fc" id="L158">        this.ledgerId = -1L;</span>
+<span class="fc" id="L159">        this.entryId = -1L;</span>
+<span class="fc" id="L160">        this.length = -1L;</span>
+<span class="fc" id="L161">        ReferenceCountUtil.release(entryBuf);</span>
+<span class="fc" id="L162">        this.entryBuf = null;</span>
+<span class="fc" id="L163">        recycleHandle.recycle(this);</span>
+<span class="fc" id="L164">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

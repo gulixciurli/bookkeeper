@@ -232,7 +232,7 @@ import org.apache.bookkeeper.client.impl.LastConfirmedAndEntryImpl;
 <span class="nc" id="L232">        }</span>
     }
 
-<span class="fc" id="L235">    static class SyncAddCallback extends CompletableFuture&lt;Long&gt; implements AsyncCallback.AddCallback {</span>
+<span class="nc" id="L235">    static class SyncAddCallback extends CompletableFuture&lt;Long&gt; implements AsyncCallback.AddCallback {</span>
 
         /**
          * Implementation of callback interface for synchronous read method.
@@ -248,8 +248,8 @@ import org.apache.bookkeeper.client.impl.LastConfirmedAndEntryImpl;
          */
         @Override
         public void addComplete(int rc, LedgerHandle lh, long entry, Object ctx) {
-<span class="fc" id="L251">            finish(rc, entry, this);</span>
-<span class="fc" id="L252">        }</span>
+<span class="nc" id="L251">            finish(rc, entry, this);</span>
+<span class="nc" id="L252">        }</span>
     }
 
 <span class="nc" id="L255">    static class FutureReadLastConfirmed extends CompletableFuture&lt;Long&gt;</span>
@@ -282,9 +282,9 @@ import org.apache.bookkeeper.client.impl.LastConfirmedAndEntryImpl;
 
         private final CompletableFuture&lt;Void&gt; future;
 
-<span class="fc" id="L285">        public SyncCloseCallback(CompletableFuture&lt;Void&gt; future) {</span>
-<span class="fc" id="L286">            this.future = future;</span>
-<span class="fc" id="L287">        }</span>
+<span class="nc" id="L285">        public SyncCloseCallback(CompletableFuture&lt;Void&gt; future) {</span>
+<span class="nc" id="L286">            this.future = future;</span>
+<span class="nc" id="L287">        }</span>
 
         /**
          * Close callback method.
@@ -295,8 +295,8 @@ import org.apache.bookkeeper.client.impl.LastConfirmedAndEntryImpl;
          */
         @Override
         public void closeComplete(int rc, LedgerHandle lh, Object ctx) {
-<span class="fc" id="L298">            finish(rc, null, future);</span>
-<span class="fc" id="L299">        }</span>
+<span class="nc" id="L298">            finish(rc, null, future);</span>
+<span class="nc" id="L299">        }</span>
     }
 
 <span class="nc" id="L302">    static class FutureReadLastConfirmedAndEntry</span>

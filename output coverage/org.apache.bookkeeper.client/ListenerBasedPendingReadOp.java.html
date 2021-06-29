@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.bookkeeper.proto.BookkeeperInternalCallbacks.ReadEntryListener;
 import org.apache.bookkeeper.util.MathUtils;
 
-<span class="nc" id="L28">@Slf4j</span>
+<span class="fc" id="L28">@Slf4j</span>
 class ListenerBasedPendingReadOp extends PendingReadOp {
 
     final ReadEntryListener listener;
@@ -38,37 +38,37 @@ class ListenerBasedPendingReadOp extends PendingReadOp {
                                ReadEntryListener listener,
                                Object ctx,
                                boolean isRecoveryRead) {
-<span class="nc" id="L41">        super(lh, clientCtx, startEntryId, endEntryId, isRecoveryRead);</span>
-<span class="nc" id="L42">        this.listener = listener;</span>
-<span class="nc" id="L43">        this.ctx = ctx;</span>
-<span class="nc" id="L44">    }</span>
+<span class="fc" id="L41">        super(lh, clientCtx, startEntryId, endEntryId, isRecoveryRead);</span>
+<span class="fc" id="L42">        this.listener = listener;</span>
+<span class="fc" id="L43">        this.ctx = ctx;</span>
+<span class="fc" id="L44">    }</span>
 
     @Override
     protected void submitCallback(int code) {
         LedgerEntryRequest request;
-<span class="nc bnc" id="L49" title="All 4 branches missed.">        while (!seq.isEmpty() &amp;&amp; (request = seq.get(0)) != null) {</span>
-<span class="nc bnc" id="L50" title="All 2 branches missed.">            if (!request.isComplete()) {</span>
+<span class="pc bpc" id="L49" title="1 of 4 branches missed.">        while (!seq.isEmpty() &amp;&amp; (request = seq.get(0)) != null) {</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">            if (!request.isComplete()) {</span>
 <span class="nc" id="L51">                return;</span>
             }
-<span class="nc" id="L53">            seq.remove(0);</span>
-<span class="nc" id="L54">            long latencyNanos = MathUtils.elapsedNanos(requestTimeNanos);</span>
+<span class="fc" id="L53">            seq.remove(0);</span>
+<span class="fc" id="L54">            long latencyNanos = MathUtils.elapsedNanos(requestTimeNanos);</span>
             LedgerEntry entry;
-<span class="nc bnc" id="L56" title="All 2 branches missed.">            if (BKException.Code.OK == request.getRc()) {</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">            if (BKException.Code.OK == request.getRc()) {</span>
 <span class="nc" id="L57">                clientCtx.getClientStats().getReadOpLogger()</span>
 <span class="nc" id="L58">                    .registerSuccessfulEvent(latencyNanos, TimeUnit.NANOSECONDS);</span>
                 // callback with completed entry
 <span class="nc" id="L60">                entry = new LedgerEntry(request.entryImpl);</span>
             } else {
-<span class="nc" id="L62">                clientCtx.getClientStats().getReadOpLogger()</span>
-<span class="nc" id="L63">                    .registerFailedEvent(latencyNanos, TimeUnit.NANOSECONDS);</span>
-<span class="nc" id="L64">                entry = null;</span>
+<span class="fc" id="L62">                clientCtx.getClientStats().getReadOpLogger()</span>
+<span class="fc" id="L63">                    .registerFailedEvent(latencyNanos, TimeUnit.NANOSECONDS);</span>
+<span class="fc" id="L64">                entry = null;</span>
             }
-<span class="nc" id="L66">            request.close();</span>
-<span class="nc" id="L67">            listener.onEntryComplete(request.getRc(), lh, entry, ctx);</span>
-<span class="nc" id="L68">        }</span>
+<span class="fc" id="L66">            request.close();</span>
+<span class="fc" id="L67">            listener.onEntryComplete(request.getRc(), lh, entry, ctx);</span>
+<span class="fc" id="L68">        }</span>
         // if all entries are already completed.
-<span class="nc" id="L70">        cancelSpeculativeTask(true);</span>
-<span class="nc" id="L71">    }</span>
+<span class="fc" id="L70">        cancelSpeculativeTask(true);</span>
+<span class="fc" id="L71">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

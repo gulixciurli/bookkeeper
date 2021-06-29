@@ -46,10 +46,10 @@ import org.slf4j.LoggerFactory;
      * @return the entry id of the next ensemble change (-1 if no further ensemble changes)
      */
     static long getNextEnsembleChange(LedgerMetadata metadata, long entryId) {
-<span class="nc" id="L49">        SortedMap&lt;Long, ? extends List&lt;BookieSocketAddress&gt;&gt; tailMap = metadata.getAllEnsembles().tailMap(entryId + 1);</span>
+<span class="fc" id="L49">        SortedMap&lt;Long, ? extends List&lt;BookieSocketAddress&gt;&gt; tailMap = metadata.getAllEnsembles().tailMap(entryId + 1);</span>
 
-<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (tailMap.isEmpty()) {</span>
-<span class="nc" id="L52">            return -1;</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (tailMap.isEmpty()) {</span>
+<span class="fc" id="L52">            return -1;</span>
         } else {
 <span class="nc" id="L54">            return tailMap.firstKey();</span>
         }
@@ -69,8 +69,8 @@ import org.slf4j.LoggerFactory;
     }
 
     static Long getLastEnsembleKey(LedgerMetadata metadata) {
-<span class="nc bnc" id="L72" title="All 2 branches missed.">        checkArgument(!metadata.getAllEnsembles().isEmpty(), &quot;Metadata should never be created with no ensembles&quot;);</span>
-<span class="nc" id="L73">        return metadata.getAllEnsembles().lastKey();</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        checkArgument(!metadata.getAllEnsembles().isEmpty(), &quot;Metadata should never be created with no ensembles&quot;);</span>
+<span class="fc" id="L73">        return metadata.getAllEnsembles().lastKey();</span>
     }
 
     public static boolean shouldStoreCtime(LedgerMetadata metadata) {

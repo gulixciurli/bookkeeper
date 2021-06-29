@@ -57,7 +57,7 @@ public abstract class BKException extends org.apache.bookkeeper.client.api.BKExc
      * @return corresponding exception
      */
     public static BKException create(int code) {
-<span class="pc bpc" id="L60" title="32 of 35 branches missed.">        switch (code) {</span>
+<span class="pc bpc" id="L60" title="31 of 35 branches missed.">        switch (code) {</span>
         case Code.ReadException:
 <span class="nc" id="L62">            return new BKReadException();</span>
         case Code.QuorumException:
@@ -109,7 +109,7 @@ public abstract class BKException extends org.apache.bookkeeper.client.api.BKExc
         case Code.ReplicationException:
 <span class="nc" id="L110">            return new BKReplicationException();</span>
         case Code.ClientClosedException:
-<span class="nc" id="L112">            return new BKClientClosedException();</span>
+<span class="fc" id="L112">            return new BKClientClosedException();</span>
         case Code.LedgerExistException:
 <span class="nc" id="L114">            return new BKLedgerExistException();</span>
         case Code.IllegalOpException:
@@ -429,8 +429,8 @@ public abstract class BKException extends org.apache.bookkeeper.client.api.BKExc
      */
     public static class BKClientClosedException extends BKException {
         public BKClientClosedException() {
-<span class="nc" id="L432">            super(BKException.Code.ClientClosedException);</span>
-<span class="nc" id="L433">        }</span>
+<span class="fc" id="L432">            super(BKException.Code.ClientClosedException);</span>
+<span class="fc" id="L433">        }</span>
     }
 
     /**

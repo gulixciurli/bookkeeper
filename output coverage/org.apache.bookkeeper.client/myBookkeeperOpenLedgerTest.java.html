@@ -28,20 +28,22 @@ public class myBookkeeperOpenLedgerTest extends BookKeeperClusterTestCase {
     private DigestType digestType;
     private byte[] password;
     private BookKeeper bkc;
+    private boolean isClosed;
 
     //private boolean closed;
 
-    public myBookkeeperOpenLedgerTest(boolean expResult, long lId, BookKeeper.DigestType digestType, byte[] password) {
+    public myBookkeeperOpenLedgerTest(boolean expResult, long lId, BookKeeper.DigestType digestType, byte[] password,boolean isClosed) {
         //Number of bookies is irrelevant in this test
-<span class="fc" id="L36">        super(4);</span>
+<span class="fc" id="L37">        super(4);</span>
 
-<span class="fc" id="L38">        this.expectedResult = expResult;</span>
-<span class="fc" id="L39">        this.ledgerID = lId;</span>
-<span class="fc" id="L40">        this.digestType = digestType;</span>
-<span class="fc" id="L41">        this.password = password;</span>
+<span class="fc" id="L39">        this.expectedResult = expResult;</span>
+<span class="fc" id="L40">        this.ledgerID = lId;</span>
+<span class="fc" id="L41">        this.digestType = digestType;</span>
+<span class="fc" id="L42">        this.password = password;</span>
+<span class="fc" id="L43">        this.isClosed= isClosed;</span>
         //this.closed = closed;
         //        DigestType digestBad = digestType == DigestType.MAC ? DigestType.CRC32 : DigestType.MAC;
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L46">    }</span>
 
     /*
     @Before
@@ -71,22 +73,18 @@ public class myBookkeeperOpenLedgerTest extends BookKeeperClusterTestCase {
 
     @Before
     public void setup() {
-<span class="fc" id="L74">        ClientConfiguration conf = new ClientConfiguration();</span>
-<span class="fc" id="L75">        conf.setMetadataServiceUri(zkUtil.getMetadataServiceUri());</span>
-<span class="fc" id="L76">        conf.setEnableDigestTypeAutodetection(false);</span>
+<span class="fc" id="L76">        ClientConfiguration conf = new ClientConfiguration();</span>
+<span class="fc" id="L77">        conf.setMetadataServiceUri(zkUtil.getMetadataServiceUri());</span>
+<span class="fc" id="L78">        conf.setEnableDigestTypeAutodetection(false);</span>
         try {
-<span class="fc" id="L78">            bkc = new BookKeeper(conf);</span>
-<span class="fc" id="L79">            lh = bkc.createLedger(DigestType.CRC32, &quot;password&quot;.getBytes()); //si crea un LedgerHandle con un ID = 0</span>
+<span class="fc" id="L80">            bkc = new BookKeeper(conf);</span>
+<span class="fc" id="L81">            lh = bkc.createLedger(DigestType.CRC32, &quot;password&quot;.getBytes()); //si crea un LedgerHandle con un ID = 0</span>
             //lh.close();
-<span class="fc bfc" id="L81" title="All 2 branches covered.">            for (int i = 0; i &lt; 100; i++) {</span>
-<span class="fc" id="L82">                lh.addEntry(&quot;foobar&quot;.getBytes());</span>
-            }
-<span class="fc" id="L84">            lh.close();</span>
 
-<span class="nc" id="L86">        } catch (IOException | InterruptedException | BKException e) {</span>
-<span class="nc" id="L87">            e.printStackTrace();</span>
-<span class="fc" id="L88">        }</span>
-<span class="fc" id="L89">    }</span>
+<span class="nc" id="L84">        } catch (IOException | InterruptedException | BKException e) {</span>
+<span class="nc" id="L85">            e.printStackTrace();</span>
+<span class="fc" id="L86">        }</span>
+<span class="fc" id="L87">    }</span>
 
 
 
@@ -98,25 +96,30 @@ public class myBookkeeperOpenLedgerTest extends BookKeeperClusterTestCase {
 
         //this parameters can be tested unidimensionally, they seem to have no connection between each other
 
-<span class="fc" id="L101">        return Arrays.asList(new Object[][]{</span>
+<span class="fc" id="L99">        return Arrays.asList(new Object[][]{</span>
 
+                /*
+                METTO LO ZERO PERCHE' SE CI SONO LEDGER CREATI, SICURAMENTE LO ZERO E' PRESENTE (IL PRIMO LEDGER CREATO AVRA' ID = 0)
+                 */
                 //fail because of wrong id
-<span class="fc" id="L104">                {false, LedgerHandle.INVALID_ENTRY_ID, BookKeeper.DigestType.MAC, &quot;password&quot;.getBytes()},   // LedgerHandle.INVALID_ENTRY_ID = -1L</span>
+<span class="fc" id="L105">                {false, LedgerHandle.INVALID_ENTRY_ID, BookKeeper.DigestType.MAC, &quot;password&quot;.getBytes(), false},   // LedgerHandle.INVALID_ENTRY_ID = -1L</span>
 
                 //fail because of wrong password
-<span class="fc" id="L107">                {false, 0, BookKeeper.DigestType.MAC, &quot;bad_password&quot;.getBytes()},</span>
-<span class="fc" id="L108">                {false, 0, BookKeeper.DigestType.MAC, &quot;&quot;.getBytes()},</span>
+<span class="fc" id="L108">                {false, 0, BookKeeper.DigestType.MAC, &quot;bad_password&quot;.getBytes(), false},</span>
+<span class="fc" id="L109">                {false, 0, BookKeeper.DigestType.MAC, &quot;&quot;.getBytes(), false},</span>
+<span class="fc" id="L110">                {false, 0, BookKeeper.DigestType.MAC, null, false},</span>
 
                 //fail because of wrong digestType
-<span class="fc" id="L111">                {true, 0, DigestType.MAC, &quot;password&quot;.getBytes()},</span>
-<span class="fc" id="L112">                {true, 0, DigestType.CRC32C, &quot;password&quot;.getBytes()},</span>
-<span class="fc" id="L113">                {true, 0, DigestType.DUMMY, &quot;password&quot;.getBytes()},</span>
+<span class="fc" id="L113">                {true, 0, DigestType.MAC, &quot;password&quot;.getBytes(), false},</span>
+<span class="fc" id="L114">                {true, 0, DigestType.CRC32C, &quot;password&quot;.getBytes(), false},</span>
+<span class="fc" id="L115">                {true, 0, DigestType.DUMMY, &quot;password&quot;.getBytes(), false},</span>
 
                 //valid configurations
                 //{true, 0, BookKeeper.DigestType.MAC, &quot;password&quot;.getBytes()},
                 //{true, 0, BookKeeper.DigestType.CRC32C, &quot;password&quot;.getBytes()},
-<span class="fc" id="L118">                {true, 0, BookKeeper.DigestType.CRC32, &quot;password&quot;.getBytes()},</span>
+<span class="fc" id="L120">                {true, 0, BookKeeper.DigestType.CRC32, &quot;password&quot;.getBytes(), false},    //sto tentando di aprire un ledger con un id che non e' mai stato creato</span>
                 //{true, 0, BookKeeper.DigestType.DUMMY, &quot;password&quot;.getBytes()},
+<span class="fc" id="L122">                {true, 1, BookKeeper.DigestType.CRC32, &quot;password&quot;.getBytes(), true},    //closed = true</span>
 
         });
 
@@ -131,66 +134,6 @@ public class myBookkeeperOpenLedgerTest extends BookKeeperClusterTestCase {
     Quindi in entrambi i casi viene restituita una BKException
 
      */
-
-/*
-    @Test
-    public void openLedger2Test() {
-        System.out.println(&quot;PROVAAAAAAA&quot;);
-        System.out.println(&quot;ledgerID ==&quot; + ledgerID + &quot;\tdigestType == &quot; + digestType + &quot;\tpassword == &quot; + password);   //sono quelli passati per parametri
-
-        System.out.println(&quot;LEDGER ID === &quot; + lh.getId());
-        if (Arrays.equals(password, &quot;password&quot;.getBytes())) {
-            System.out.println((&quot;CHE PALLEEEEEE&quot;));
-        }
-        LedgerHandle res = null;
-
-        try {
-            res = bkc.openLedger(ledgerID, digestType, password);
-
-        } catch (BKException e) {
-            //ci vado quando fallisce l'operazione openLedger, quindi quando ho o la pw sbagliata o l'id sbagliato
-            System.out.println(&quot;CACCA1&quot;);
-            //e.printStackTrace();
-            res = null;     // se ho un'eccezione del genere o la pw e' sbagliata o l'id, quindi ci entro
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            System.out.println(&quot;CACCA2&quot;);
-        }
-        System.out.println(&quot;PASSWORD === &quot; + password + &quot;\tledgerID ===&quot; + ledgerID);
-        if(Arrays.equals(password, &quot;password&quot;.getBytes()) &amp;&amp; ledgerID == 0 ) {
-            System.out.println(&quot;CACCA&quot;);
-            Assert.assertEquals(res, lh);
-        }
-        else {
-            Assert.assertNull(res);
-            System.out.println(&quot;PIPI&quot;);
-        }
-
-        /*
-        try {
-            LedgerHandle lha = bkc.openLedger(ledgerID, digestType, password);
-
-            //check if ledger is open for us (which means its closed for others)
-            //Assert.assertTrue(lha != null &amp;&amp; lha.isClosed());
-
-        } catch (InterruptedException e) {
-            //the test failed becuse of a system failure
-            e.printStackTrace();
-        } catch (BKException e) {
-            //we failed to open the ledger - check if the error is correct
-            if (!Arrays.equals(password, &quot;password&quot;.getBytes()))
-                Assert.assertEquals(e.getMessage() ,&quot;Attempted to access ledger using the wrong password&quot;);
-            else
-                Assert.assertEquals(e.getMessage() ,&quot;No such ledger exists on Metadata Server&quot;);
-        }
-
-
-
-
-
-    }
- */
-
 
 
     @Test
@@ -211,47 +154,61 @@ public class myBookkeeperOpenLedgerTest extends BookKeeperClusterTestCase {
         }
 
         */
+
         try {
-<span class="fc" id="L215">            bkc.openLedger(ledgerID, digestType, password);</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">            if(isClosed) {</span>
+<span class="fc" id="L160">                bkc.close();</span>
+            }
+<span class="fc" id="L162">            LedgerHandle lh2 = bkc.openLedger(ledgerID, digestType, password);</span>
+<span class="pc bpc" id="L163" title="2 of 4 branches missed.">            Assert.assertTrue(lh2 != null &amp;&amp; lh2.isClosed());</span>
 
             //check if ledger is open for us (which means its closed for others)
             //Assert.assertTrue(lha != null &amp;&amp; lha.isClosed());
 
-<span class="nc" id="L220">        } catch (InterruptedException e) {</span>
+<span class="nc" id="L168">        } catch (InterruptedException e) {</span>
             //the test failed becuse of a system failure
-<span class="nc" id="L222">            e.printStackTrace();</span>
-<span class="nc" id="L223">            Assert.fail();</span>
+<span class="nc" id="L170">            e.printStackTrace();</span>
+<span class="nc" id="L171">            Assert.fail();</span>
 
-<span class="fc" id="L225">        } catch (BKException e) {</span>
-            //we failed to open the ledger - check if the error is correct
-<span class="fc bfc" id="L227" title="All 2 branches covered.">            if(ledgerID == LedgerHandle.INVALID_ENTRY_ID) {</span>
-<span class="fc" id="L228">                Assert.assertEquals(e.getMessage() ,&quot;No such ledger exists on Metadata Server&quot;);</span>
+<span class="fc" id="L173">        } catch (BKException e) {</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">            if(isClosed) {</span>
+<span class="fc" id="L175">                Assert.assertEquals(e.getMessage(), &quot;BookKeeper client is closed&quot;);</span>
             }
             else {
-<span class="fc bfc" id="L231" title="All 2 branches covered.">                if (!Arrays.equals(password, &quot;password&quot;.getBytes())) {</span>
-<span class="fc" id="L232">                    Assert.assertEquals(e.getMessage() ,&quot;Attempted to access ledger using the wrong password&quot;);</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">                if(ledgerID == LedgerHandle.INVALID_ENTRY_ID) {</span>
+<span class="fc" id="L179">                    Assert.assertEquals(e.getMessage() ,&quot;No such ledger exists on Metadata Server&quot;);</span>
+                }
+<span class="fc bfc" id="L181" title="All 2 branches covered.">                if(ledgerID != lh.getId()) {</span>
+<span class="fc" id="L182">                    Assert.assertEquals(e.getMessage() ,&quot;No such ledger exists on Metadata Server&quot;);</span>
                 }
                 else {
-                    //if (!digestType.equals(DigestType.CRC32)) {
-<span class="fc" id="L236">                        Assert.assertEquals(e.getMessage() ,&quot;Entry digest does not match&quot;);</span>
-                    //}
+<span class="fc bfc" id="L185" title="All 2 branches covered.">                    if (!Arrays.equals(password, &quot;password&quot;.getBytes())) {</span>
+<span class="fc" id="L186">                        Assert.assertEquals(e.getMessage() ,&quot;Attempted to access ledger using the wrong password&quot;);</span>
+                    }
+                    else {
+                        //if (!digestType.equals(DigestType.CRC32)) {
+<span class="fc" id="L190">                        Assert.assertEquals(e.getMessage() ,&quot;Entry digest does not match&quot;);</span>
+                        //}
+                    }
                 }
             }
-<span class="fc" id="L240">            e.printStackTrace();</span>
+            //we failed to open the ledger - check if the error is correct
 
-<span class="pc" id="L242">        }</span>
-<span class="fc" id="L243">    }</span>
+<span class="fc" id="L197">            e.printStackTrace();</span>
+
+<span class="pc" id="L199">        }</span>
+<span class="fc" id="L200">    }</span>
 
 
     @After
     public void tearDown() {
         //Delete the ledger created
         try {
-<span class="fc" id="L250">            bkc.deleteLedger(lh.getId());</span>
-<span class="nc" id="L251">        } catch (InterruptedException | BKException e) {</span>
-<span class="nc" id="L252">            e.printStackTrace();</span>
-<span class="fc" id="L253">        }</span>
-<span class="fc" id="L254">    }</span>
+<span class="fc" id="L207">            bkc.deleteLedger(lh.getId());</span>
+<span class="fc" id="L208">        } catch (InterruptedException | BKException e) {</span>
+<span class="fc" id="L209">            e.printStackTrace();</span>
+<span class="fc" id="L210">        }</span>
+<span class="fc" id="L211">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

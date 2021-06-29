@@ -650,7 +650,7 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
 
     @VisibleForTesting
     OrderedScheduler getScheduler() {
-<span class="nc" id="L653">        return scheduler;</span>
+<span class="fc" id="L653">        return scheduler;</span>
     }
 
     @VisibleForTesting
@@ -1179,9 +1179,9 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
                                 final OpenCallback cb, final Object ctx) {
 <span class="fc" id="L1180">        closeLock.readLock().lock();</span>
         try {
-<span class="pc bpc" id="L1182" title="1 of 2 branches missed.">            if (closed) {</span>
-<span class="nc" id="L1183">                cb.openComplete(BKException.Code.ClientClosedException, null, ctx);</span>
-<span class="nc" id="L1184">                return;</span>
+<span class="fc bfc" id="L1182" title="All 2 branches covered.">            if (closed) {</span>
+<span class="fc" id="L1183">                cb.openComplete(BKException.Code.ClientClosedException, null, ctx);</span>
+<span class="fc" id="L1184">                return;</span>
             }
 <span class="fc" id="L1186">            new LedgerOpenOp(BookKeeper.this, clientStats,</span>
 <span class="fc" id="L1187">                             lId, digestType, passwd, cb, ctx).initiate();</span>
@@ -1304,9 +1304,9 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
     public void asyncDeleteLedger(final long lId, final DeleteCallback cb, final Object ctx) {
 <span class="fc" id="L1305">        closeLock.readLock().lock();</span>
         try {
-<span class="pc bpc" id="L1307" title="1 of 2 branches missed.">            if (closed) {</span>
-<span class="nc" id="L1308">                cb.deleteComplete(BKException.Code.ClientClosedException, ctx);</span>
-<span class="nc" id="L1309">                return;</span>
+<span class="fc bfc" id="L1307" title="All 2 branches covered.">            if (closed) {</span>
+<span class="fc" id="L1308">                cb.deleteComplete(BKException.Code.ClientClosedException, ctx);</span>
+<span class="fc" id="L1309">                return;</span>
             }
 <span class="fc" id="L1311">            new LedgerDeleteOp(BookKeeper.this, clientStats, lId, cb, ctx).initiate();</span>
         } finally {
@@ -1400,52 +1400,52 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
      */
     @Override
     public void close() throws BKException, InterruptedException {
-<span class="nc" id="L1403">        closeLock.writeLock().lock();</span>
+<span class="fc" id="L1403">        closeLock.writeLock().lock();</span>
         try {
-<span class="nc bnc" id="L1405" title="All 2 branches missed.">            if (closed) {</span>
+<span class="pc bpc" id="L1405" title="1 of 2 branches missed.">            if (closed) {</span>
 <span class="nc" id="L1406">                return;</span>
             }
-<span class="nc" id="L1408">            closed = true;</span>
+<span class="fc" id="L1408">            closed = true;</span>
         } finally {
-<span class="nc" id="L1410">            closeLock.writeLock().unlock();</span>
+<span class="fc" id="L1410">            closeLock.writeLock().unlock();</span>
         }
 
         // Close bookie client so all pending bookie requests would be failed
         // which will reject any incoming bookie requests.
-<span class="nc" id="L1415">        bookieClient.close();</span>
+<span class="fc" id="L1415">        bookieClient.close();</span>
         try {
             // Close ledger manage so all pending metadata requests would be failed
             // which will reject any incoming metadata requests.
-<span class="nc" id="L1419">            ledgerManager.close();</span>
-<span class="nc" id="L1420">            ledgerIdGenerator.close();</span>
+<span class="fc" id="L1419">            ledgerManager.close();</span>
+<span class="fc" id="L1420">            ledgerIdGenerator.close();</span>
 <span class="nc" id="L1421">        } catch (IOException ie) {</span>
 <span class="nc" id="L1422">            LOG.error(&quot;Failed to close ledger manager : &quot;, ie);</span>
-<span class="nc" id="L1423">        }</span>
+<span class="fc" id="L1423">        }</span>
 
         // Close the scheduler
-<span class="nc" id="L1426">        scheduler.shutdown();</span>
-<span class="nc bnc" id="L1427" title="All 2 branches missed.">        if (!scheduler.awaitTermination(10, TimeUnit.SECONDS)) {</span>
+<span class="fc" id="L1426">        scheduler.shutdown();</span>
+<span class="pc bpc" id="L1427" title="1 of 2 branches missed.">        if (!scheduler.awaitTermination(10, TimeUnit.SECONDS)) {</span>
 <span class="nc" id="L1428">            LOG.warn(&quot;The scheduler did not shutdown cleanly&quot;);</span>
         }
-<span class="nc" id="L1430">        mainWorkerPool.shutdown();</span>
-<span class="nc bnc" id="L1431" title="All 2 branches missed.">        if (!mainWorkerPool.awaitTermination(10, TimeUnit.SECONDS)) {</span>
+<span class="fc" id="L1430">        mainWorkerPool.shutdown();</span>
+<span class="pc bpc" id="L1431" title="1 of 2 branches missed.">        if (!mainWorkerPool.awaitTermination(10, TimeUnit.SECONDS)) {</span>
 <span class="nc" id="L1432">            LOG.warn(&quot;The mainWorkerPool did not shutdown cleanly&quot;);</span>
         }
-<span class="nc bnc" id="L1434" title="All 2 branches missed.">        if (this.bookieInfoScheduler != null) {</span>
+<span class="pc bpc" id="L1434" title="1 of 2 branches missed.">        if (this.bookieInfoScheduler != null) {</span>
 <span class="nc" id="L1435">            this.bookieInfoScheduler.shutdown();</span>
 <span class="nc bnc" id="L1436" title="All 2 branches missed.">            if (!bookieInfoScheduler.awaitTermination(10, TimeUnit.SECONDS)) {</span>
 <span class="nc" id="L1437">                LOG.warn(&quot;The bookieInfoScheduler did not shutdown cleanly&quot;);</span>
             }
         }
 
-<span class="nc bnc" id="L1441" title="All 2 branches missed.">        if (ownTimer) {</span>
-<span class="nc" id="L1442">            requestTimer.stop();</span>
+<span class="pc bpc" id="L1441" title="1 of 2 branches missed.">        if (ownTimer) {</span>
+<span class="fc" id="L1442">            requestTimer.stop();</span>
         }
-<span class="nc bnc" id="L1444" title="All 2 branches missed.">        if (ownEventLoopGroup) {</span>
-<span class="nc" id="L1445">            eventLoopGroup.shutdownGracefully();</span>
+<span class="pc bpc" id="L1444" title="1 of 2 branches missed.">        if (ownEventLoopGroup) {</span>
+<span class="fc" id="L1445">            eventLoopGroup.shutdownGracefully();</span>
         }
-<span class="nc" id="L1447">        this.metadataDriver.close();</span>
-<span class="nc" id="L1448">    }</span>
+<span class="fc" id="L1447">        this.metadataDriver.close();</span>
+<span class="fc" id="L1448">    }</span>
 
     @Override
     public CreateBuilder newCreateLedgerOp() {
@@ -1490,12 +1490,12 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
 
             @Override
             public OrderedExecutor getMainWorkerPool() {
-<span class="fc" id="L1493">                return BookKeeper.this.getMainWorkerPool();</span>
+<span class="nc" id="L1493">                return BookKeeper.this.getMainWorkerPool();</span>
             }
 
             @Override
             public OrderedScheduler getScheduler() {
-<span class="nc" id="L1498">                return BookKeeper.this.getScheduler();</span>
+<span class="fc" id="L1498">                return BookKeeper.this.getScheduler();</span>
             }
 
             @Override

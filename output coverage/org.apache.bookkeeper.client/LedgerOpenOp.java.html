@@ -185,22 +185,22 @@ class LedgerOpenOp {
 
 <span class="pc bpc" id="L186" title="1 of 2 branches missed.">        if (metadata.isClosed()) {</span>
             // Ledger was closed properly
-<span class="fc" id="L188">            openComplete(BKException.Code.OK, lh);</span>
-<span class="fc" id="L189">            return;</span>
+<span class="nc" id="L188">            openComplete(BKException.Code.OK, lh);</span>
+<span class="nc" id="L189">            return;</span>
         }
 
-<span class="nc bnc" id="L192" title="All 2 branches missed.">        if (doRecovery) {</span>
-<span class="nc" id="L193">            lh.recover(new OrderedGenericCallback&lt;Void&gt;(bk.getMainWorkerPool(), ledgerId) {</span>
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        if (doRecovery) {</span>
+<span class="fc" id="L193">            lh.recover(new OrderedGenericCallback&lt;Void&gt;(bk.getMainWorkerPool(), ledgerId) {</span>
                 @Override
                 public void safeOperationComplete(int rc, Void result) {
-<span class="nc bnc" id="L196" title="All 2 branches missed.">                    if (rc == BKException.Code.OK) {</span>
-<span class="nc" id="L197">                        openComplete(BKException.Code.OK, lh);</span>
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">                    if (rc == BKException.Code.OK) {</span>
+<span class="fc" id="L197">                        openComplete(BKException.Code.OK, lh);</span>
 <span class="nc bnc" id="L198" title="All 2 branches missed.">                    } else if (rc == BKException.Code.UnauthorizedAccessException) {</span>
 <span class="nc" id="L199">                        openComplete(BKException.Code.UnauthorizedAccessException, null);</span>
                     } else {
 <span class="nc" id="L201">                        openComplete(bk.getReturnRc(BKException.Code.LedgerRecoveryException), null);</span>
                     }
-<span class="nc" id="L203">                }</span>
+<span class="fc" id="L203">                }</span>
                 @Override
                 public String toString() {
 <span class="nc" id="L206">                    return String.format(&quot;Recover(%d)&quot;, ledgerId);</span>
@@ -221,7 +221,7 @@ class LedgerOpenOp {
             }, null);
 
         }
-<span class="nc" id="L224">    }</span>
+<span class="fc" id="L224">    }</span>
 
     void openComplete(int rc, LedgerHandle lh) {
 <span class="fc bfc" id="L227" title="All 2 branches covered.">        if (BKException.Code.OK != rc) {</span>

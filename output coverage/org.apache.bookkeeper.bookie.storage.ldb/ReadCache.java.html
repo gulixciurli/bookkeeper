@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReadCache.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myTest2.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.bookie.storage.ldb</a> &gt; <span class="el_source">ReadCache.java</span></div><h1>ReadCache.java</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReadCache.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myBookieFenceLedgerTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.bookie.storage.ldb</a> &gt; <span class="el_source">ReadCache.java</span></div><h1>ReadCache.java</h1><pre class="source lang-java linenums">/**
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -53,78 +53,78 @@ public class ReadCache implements Closeable {
     private final List&lt;ConcurrentLongLongPairHashMap&gt; cacheIndexes;
 
     private int currentSegmentIdx;
-<span class="fc" id="L56">    private final AtomicInteger currentSegmentOffset = new AtomicInteger(0);</span>
+<span class="nc" id="L56">    private final AtomicInteger currentSegmentOffset = new AtomicInteger(0);</span>
 
     private final int segmentSize;
 
     private ByteBufAllocator allocator;
-<span class="fc" id="L61">    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();</span>
+<span class="nc" id="L61">    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();</span>
 
     public ReadCache(ByteBufAllocator allocator, long maxCacheSize) {
-<span class="fc" id="L64">        this(allocator, maxCacheSize, DEFAULT_MAX_SEGMENT_SIZE);</span>
-<span class="fc" id="L65">    }</span>
+<span class="nc" id="L64">        this(allocator, maxCacheSize, DEFAULT_MAX_SEGMENT_SIZE);</span>
+<span class="nc" id="L65">    }</span>
 
-<span class="fc" id="L67">    public ReadCache(ByteBufAllocator allocator, long maxCacheSize, int maxSegmentSize) {</span>
-<span class="fc" id="L68">        this.allocator = allocator;</span>
-<span class="fc" id="L69">        int segmentsCount = Math.max(2, (int) (maxCacheSize / maxSegmentSize));</span>
-<span class="fc" id="L70">        segmentSize = (int) (maxCacheSize / segmentsCount);</span>
+<span class="nc" id="L67">    public ReadCache(ByteBufAllocator allocator, long maxCacheSize, int maxSegmentSize) {</span>
+<span class="nc" id="L68">        this.allocator = allocator;</span>
+<span class="nc" id="L69">        int segmentsCount = Math.max(2, (int) (maxCacheSize / maxSegmentSize));</span>
+<span class="nc" id="L70">        segmentSize = (int) (maxCacheSize / segmentsCount);</span>
 
-<span class="fc" id="L72">        cacheSegments = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L73">        cacheIndexes = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L72">        cacheSegments = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L73">        cacheIndexes = new ArrayList&lt;&gt;();</span>
 
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        for (int i = 0; i &lt; segmentsCount; i++) {</span>
-<span class="fc" id="L76">            cacheSegments.add(Unpooled.directBuffer(segmentSize, segmentSize));</span>
-<span class="fc" id="L77">            cacheIndexes.add(new ConcurrentLongLongPairHashMap(4096, 2 * Runtime.getRuntime().availableProcessors()));</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        for (int i = 0; i &lt; segmentsCount; i++) {</span>
+<span class="nc" id="L76">            cacheSegments.add(Unpooled.directBuffer(segmentSize, segmentSize));</span>
+<span class="nc" id="L77">            cacheIndexes.add(new ConcurrentLongLongPairHashMap(4096, 2 * Runtime.getRuntime().availableProcessors()));</span>
         }
-<span class="fc" id="L79">    }</span>
+<span class="nc" id="L79">    }</span>
 
     @Override
     public void close() {
-<span class="fc" id="L83">        cacheSegments.forEach(ByteBuf::release);</span>
-<span class="fc" id="L84">    }</span>
+<span class="nc" id="L83">        cacheSegments.forEach(ByteBuf::release);</span>
+<span class="nc" id="L84">    }</span>
 
     public void put(long ledgerId, long entryId, ByteBuf entry) {
-<span class="fc" id="L87">        int entrySize = entry.readableBytes();</span>
-<span class="fc" id="L88">        int alignedSize = align64(entrySize);</span>
+<span class="nc" id="L87">        int entrySize = entry.readableBytes();</span>
+<span class="nc" id="L88">        int alignedSize = align64(entrySize);</span>
 
-<span class="fc" id="L90">        lock.readLock().lock();</span>
+<span class="nc" id="L90">        lock.readLock().lock();</span>
 
         try {
-<span class="fc" id="L93">            int offset = currentSegmentOffset.getAndAdd(alignedSize);</span>
-<span class="fc bfc" id="L94" title="All 2 branches covered.">            if (offset + entrySize &gt; segmentSize) {</span>
+<span class="nc" id="L93">            int offset = currentSegmentOffset.getAndAdd(alignedSize);</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            if (offset + entrySize &gt; segmentSize) {</span>
                 // Roll-over the segment (outside the read-lock)
             } else {
                 // Copy entry into read cache segment
-<span class="fc" id="L98">                cacheSegments.get(currentSegmentIdx).setBytes(offset, entry, entry.readerIndex(),</span>
-<span class="fc" id="L99">                        entry.readableBytes());</span>
-<span class="fc" id="L100">                cacheIndexes.get(currentSegmentIdx).put(ledgerId, entryId, offset, entrySize);</span>
-<span class="fc" id="L101">                return;</span>
+<span class="nc" id="L98">                cacheSegments.get(currentSegmentIdx).setBytes(offset, entry, entry.readerIndex(),</span>
+<span class="nc" id="L99">                        entry.readableBytes());</span>
+<span class="nc" id="L100">                cacheIndexes.get(currentSegmentIdx).put(ledgerId, entryId, offset, entrySize);</span>
+<span class="nc" id="L101">                return;</span>
             }
         } finally {
-<span class="fc" id="L104">            lock.readLock().unlock();</span>
+<span class="nc" id="L104">            lock.readLock().unlock();</span>
         }
 
         // We could not insert in segment, we to get the write lock and roll-over to
         // next segment
-<span class="fc" id="L109">        lock.writeLock().lock();</span>
+<span class="nc" id="L109">        lock.writeLock().lock();</span>
 
         try {
-<span class="fc" id="L112">            int offset = currentSegmentOffset.getAndAdd(entrySize);</span>
-<span class="pc bpc" id="L113" title="1 of 2 branches missed.">            if (offset + entrySize &gt; segmentSize) {</span>
+<span class="nc" id="L112">            int offset = currentSegmentOffset.getAndAdd(entrySize);</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">            if (offset + entrySize &gt; segmentSize) {</span>
                 // Rollover to next segment
-<span class="fc" id="L115">                currentSegmentIdx = (currentSegmentIdx + 1) % cacheSegments.size();</span>
-<span class="fc" id="L116">                currentSegmentOffset.set(alignedSize);</span>
-<span class="fc" id="L117">                cacheIndexes.get(currentSegmentIdx).clear();</span>
-<span class="fc" id="L118">                offset = 0;</span>
+<span class="nc" id="L115">                currentSegmentIdx = (currentSegmentIdx + 1) % cacheSegments.size();</span>
+<span class="nc" id="L116">                currentSegmentOffset.set(alignedSize);</span>
+<span class="nc" id="L117">                cacheIndexes.get(currentSegmentIdx).clear();</span>
+<span class="nc" id="L118">                offset = 0;</span>
             }
 
             // Copy entry into read cache segment
-<span class="fc" id="L122">            cacheSegments.get(currentSegmentIdx).setBytes(offset, entry, entry.readerIndex(), entry.readableBytes());</span>
-<span class="fc" id="L123">            cacheIndexes.get(currentSegmentIdx).put(ledgerId, entryId, offset, entrySize);</span>
+<span class="nc" id="L122">            cacheSegments.get(currentSegmentIdx).setBytes(offset, entry, entry.readerIndex(), entry.readableBytes());</span>
+<span class="nc" id="L123">            cacheIndexes.get(currentSegmentIdx).put(ledgerId, entryId, offset, entrySize);</span>
         } finally {
-<span class="fc" id="L125">            lock.writeLock().unlock();</span>
+<span class="nc" id="L125">            lock.writeLock().unlock();</span>
         }
-<span class="fc" id="L127">    }</span>
+<span class="nc" id="L127">    }</span>
 
     public ByteBuf get(long ledgerId, long entryId) {
 <span class="nc" id="L130">        lock.readLock().lock();</span>

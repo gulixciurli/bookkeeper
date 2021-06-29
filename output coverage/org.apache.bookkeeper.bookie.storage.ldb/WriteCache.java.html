@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WriteCache.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myTest2.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.bookie.storage.ldb</a> &gt; <span class="el_source">WriteCache.java</span></div><h1>WriteCache.java</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WriteCache.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myBookieFenceLedgerTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.bookie.storage.ldb</a> &gt; <span class="el_source">WriteCache.java</span></div><h1>WriteCache.java</h1><pre class="source lang-java linenums">/**
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -210,7 +210,7 @@ public class WriteCache implements Closeable {
 <span class="nc" id="L210">        deletedLedgers.add(ledgerId);</span>
 <span class="nc" id="L211">    }</span>
 
-<span class="fc" id="L213">    private static final ArrayGroupSort groupSorter = new ArrayGroupSort(2, 4);</span>
+<span class="nc" id="L213">    private static final ArrayGroupSort groupSorter = new ArrayGroupSort(2, 4);</span>
 
     public void forEach(EntryConsumer consumer) {
 <span class="nc" id="L216">        sortedEntriesLock.lock();</span>
@@ -291,7 +291,7 @@ public class WriteCache implements Closeable {
     private static final int ALIGN_64_MASK = ~(64 - 1);
 
     static int align64(int size) {
-<span class="fc" id="L294">        return (size + 64 - 1) &amp; ALIGN_64_MASK;</span>
+<span class="nc" id="L294">        return (size + 64 - 1) &amp; ALIGN_64_MASK;</span>
     }
 
     private static long alignToPowerOfTwo(long n) {
@@ -302,6 +302,6 @@ public class WriteCache implements Closeable {
     private long[] sortedEntries;
     private int sortedEntriesIdx;
 
-<span class="fc" id="L305">    private static final Logger log = LoggerFactory.getLogger(WriteCache.class);</span>
+<span class="nc" id="L305">    private static final Logger log = LoggerFactory.getLogger(WriteCache.class);</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
