@@ -27,7 +27,6 @@ public class myBookkeeperOpenLedgerTest extends BookKeeperClusterTestCase {
     private long ledgerID;
     private DigestType digestType;
     private byte[] password;
-    BookKeeper.DigestType digestBad = BookKeeper.DigestType.CRC32 == BookKeeper.DigestType.MAC ? BookKeeper.DigestType.CRC32 : BookKeeper.DigestType.MAC;
     private BookKeeper bkc;
 
     //private boolean closed;
@@ -78,6 +77,7 @@ public class myBookkeeperOpenLedgerTest extends BookKeeperClusterTestCase {
         try {
             bkc = new BookKeeper(conf);
             lh = bkc.createLedger(DigestType.CRC32, "password".getBytes()); //si crea un LedgerHandle con un ID = 0
+            ledgerID = lh.getId();
             //lh.close();
             for (int i = 0; i < 100; i++) {
                 lh.addEntry("foobar".getBytes());
@@ -101,12 +101,16 @@ public class myBookkeeperOpenLedgerTest extends BookKeeperClusterTestCase {
 
         return Arrays.asList(new Object[][]{
 
+                /*
+                METTO LO ZERO PERCHE' SE CI SONO LEDGER CREATI, SICURAMENTE LO ZERO E' PRESENTE (IL PRIMO LEDGER CREATO AVRA' ID = 0)
+                 */
                 //fail because of wrong id
                 {false, LedgerHandle.INVALID_ENTRY_ID, BookKeeper.DigestType.MAC, "password".getBytes()},   // LedgerHandle.INVALID_ENTRY_ID = -1L
 
                 //fail because of wrong password
                 {false, 0, BookKeeper.DigestType.MAC, "bad_password".getBytes()},
                 {false, 0, BookKeeper.DigestType.MAC, "".getBytes()},
+                //mettere anche null
 
                 //fail because of wrong digestType
                 {true, 0, DigestType.MAC, "password".getBytes()},
@@ -116,7 +120,7 @@ public class myBookkeeperOpenLedgerTest extends BookKeeperClusterTestCase {
                 //valid configurations
                 //{true, 0, BookKeeper.DigestType.MAC, "password".getBytes()},
                 //{true, 0, BookKeeper.DigestType.CRC32C, "password".getBytes()},
-                {true, 0, BookKeeper.DigestType.CRC32, "password".getBytes()},
+                {true, 100, BookKeeper.DigestType.CRC32, "password".getBytes()},
                 //{true, 0, BookKeeper.DigestType.DUMMY, "password".getBytes()},
 
         });
@@ -221,6 +225,8 @@ public class myBookkeeperOpenLedgerTest extends BookKeeperClusterTestCase {
         } catch (InterruptedException e) {
             //the test failed becuse of a system failure
             e.printStackTrace();
+            Assert.fail();
+
         } catch (BKException e) {
             //we failed to open the ledger - check if the error is correct
             if(ledgerID == LedgerHandle.INVALID_ENTRY_ID) {
@@ -231,10 +237,9 @@ public class myBookkeeperOpenLedgerTest extends BookKeeperClusterTestCase {
                     Assert.assertEquals(e.getMessage() ,"Attempted to access ledger using the wrong password");
                 }
                 else {
-                    if (!digestType.equals(DigestType.CRC32)) {
+                    //if (!digestType.equals(DigestType.CRC32)) {
                         Assert.assertEquals(e.getMessage() ,"Entry digest does not match");
-
-                    }
+                    //}
                 }
             }
             e.printStackTrace();

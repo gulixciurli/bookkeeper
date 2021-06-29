@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>myReadCacheGetTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.bookie.storage.ldb</a> &gt; <span class="el_source">myReadCacheGetTest.java</span></div><h1>myReadCacheGetTest.java</h1><pre class="source lang-java linenums">package org.apache.bookkeeper.bookie.storage.ldb;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.buffer.UnpooledByteBufAllocator;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import java.util.Arrays;
+import java.util.Collection;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+@RunWith(Parameterized.class)
+public class myReadCacheGetTest {
+
+    private boolean exists;
+<span class="nc" id="L20">    private ReadCache cache = null;</span>
+    private ByteBuf entry;
+    private long ledgerId;
+    private long entryId;
+    private boolean expected;
+
+
+    @Parameterized.Parameters
+    public static Collection&lt;?&gt; getParameter() {
+<span class="nc" id="L29">        return Arrays.asList(new Object[][] {</span>
+                //grandezza buffer per numero entry
+                //il terzo valore indica se il valore esiste nel momento della get oppure non esiste
+<span class="nc" id="L32">                { 0, -1, true, Unpooled.wrappedBuffer(new byte[64]), true},</span>
+<span class="nc" id="L33">                { 0, 1, true, Unpooled.wrappedBuffer(new byte[64]), true},</span>
+<span class="nc" id="L34">                { 1, 0, false, Unpooled.wrappedBuffer(new byte[64]), false}</span>
+        });
+    }
+
+    @After
+    public void after(){
+<span class="nc" id="L40">        cache.close();</span>
+<span class="nc" id="L41">    }</span>
+
+    @Before
+    public void before(){
+<span class="nc" id="L45">        this.cache = new ReadCache(UnpooledByteBufAllocator.DEFAULT, 10 * 1024);</span>
+<span class="nc" id="L46">        this.cache.put(this.ledgerId, this.entryId, this.entry);</span>
+<span class="nc" id="L47">    }</span>
+
+<span class="nc" id="L49">    public myReadCacheGetTest(long ledgerId, long entryId, boolean exists, ByteBuf entry, boolean expected){</span>
+<span class="nc" id="L50">        this.ledgerId = ledgerId;</span>
+<span class="nc" id="L51">        this.entryId = entryId;</span>
+<span class="nc" id="L52">        this.entry = entry;</span>
+<span class="nc" id="L53">        this.exists = exists;</span>
+<span class="nc" id="L54">        this.expected = expected;</span>
+<span class="nc" id="L55">    }</span>
+
+
+
+    @Test
+    public void get(){
+        //test per aumentare la coverage, testo qualcosa che non esiste
+        boolean result;
+        try{
+<span class="nc bnc" id="L64" title="All 2 branches missed.">            if(this.exists == false)</span>
+<span class="nc" id="L65">                result = this.cache.get(0, 0).equals(this.entry);</span>
+            else {
+<span class="nc" id="L67">                result = this.cache.get(this.ledgerId, this.entryId).equals(this.entry);</span>
+<span class="nc" id="L68">                System.out.println(result);</span>
+            }
+<span class="nc" id="L70">        }catch (Exception e){</span>
+<span class="nc" id="L71">            e.printStackTrace();</span>
+<span class="nc" id="L72">            result = false;</span>
+<span class="nc" id="L73">        }</span>
+<span class="nc" id="L74">        assertEquals(this.expected, result);</span>
+<span class="nc" id="L75">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

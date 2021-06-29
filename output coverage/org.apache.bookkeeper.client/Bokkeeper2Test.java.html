@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Bokkeeper2Test.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myBookkeeperOpenLedgerTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">Bokkeeper2Test.java</span></div><h1>Bokkeeper2Test.java</h1><pre class="source lang-java linenums">/*
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ */
+package org.apache.bookkeeper.client;
+
+import static org.apache.bookkeeper.client.BookKeeperClientStats.WRITE_DELAYED_DUE_TO_NOT_ENOUGH_FAULT_DOMAINS;
+import static org.apache.bookkeeper.client.BookKeeperClientStats.WRITE_TIMED_OUT_DUE_TO_NOT_ENOUGH_FAULT_DOMAINS;
+import static org.apache.bookkeeper.common.concurrent.FutureUtils.result;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import io.netty.util.IllegalReferenceCountException;
+
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
+import org.apache.bookkeeper.client.AsyncCallback.AddCallback;
+import org.apache.bookkeeper.client.AsyncCallback.ReadCallback;
+import org.apache.bookkeeper.client.BKException.BKBookieHandleNotAvailableException;
+import org.apache.bookkeeper.client.BKException.BKIllegalOpException;
+import org.apache.bookkeeper.client.BookKeeper.DigestType;
+import org.apache.bookkeeper.client.api.WriteFlag;
+import org.apache.bookkeeper.client.api.WriteHandle;
+import org.apache.bookkeeper.conf.ClientConfiguration;
+import org.apache.bookkeeper.net.BookieSocketAddress;
+import org.apache.bookkeeper.proto.BookieServer;
+import org.apache.bookkeeper.stats.NullStatsLogger;
+import org.apache.bookkeeper.stats.StatsLogger;
+import org.apache.bookkeeper.test.BookKeeperClusterTestCase;
+import org.apache.bookkeeper.test.TestStatsProvider;
+import org.apache.bookkeeper.zookeeper.BoundExponentialBackoffRetryPolicy;
+import org.apache.bookkeeper.zookeeper.ZooKeeperClient;
+import org.apache.bookkeeper.zookeeper.ZooKeeperWatcherBase;
+import org.apache.zookeeper.AsyncCallback.StringCallback;
+import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.KeeperException.ConnectionLossException;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.Watcher.Event.EventType;
+import org.apache.zookeeper.Watcher.Event.KeeperState;
+import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.ZooKeeper.States;
+import org.apache.zookeeper.data.ACL;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Tests of the main BookKeeper client.
+ */
+public class Bokkeeper2Test extends BookKeeperClusterTestCase {
+<span class="nc" id="L83">    private static final Logger LOG = LoggerFactory.getLogger(BookKeeperTest.class);</span>
+    private static final long INVALID_LEDGERID = -1L;
+    private final DigestType digestType;
+
+    public Bokkeeper2Test() {
+<span class="nc" id="L88">        super(4);</span>
+<span class="nc" id="L89">        this.digestType = DigestType.CRC32;</span>
+<span class="nc" id="L90">    }</span>
+
+
+
+    /**
+     * Test that bookkeeper is not able to open ledgers if
+     * it provides the wrong password or wrong digest.
+     */
+    @Test
+    public void testBookkeeperDigestPasswordWithAutoDetection() throws Exception {
+<span class="nc" id="L100">        testBookkeeperDigestPassword(true);</span>
+<span class="nc" id="L101">    }</span>
+
+
+    @Test
+    public void testBookkeeperDigestPasswordWithoutAutoDetection() throws Exception {
+<span class="nc" id="L106">        testBookkeeperDigestPassword(false);</span>
+<span class="nc" id="L107">    }</span>
+
+
+
+    void testBookkeeperDigestPassword(boolean autodetection) throws Exception {
+<span class="nc" id="L112">        ClientConfiguration conf = new ClientConfiguration();</span>
+<span class="nc" id="L113">        conf.setMetadataServiceUri(zkUtil.getMetadataServiceUri());</span>
+<span class="nc" id="L114">        conf.setEnableDigestTypeAutodetection(autodetection);</span>
+<span class="nc" id="L115">        BookKeeper bkc = new BookKeeper(conf);</span>
+
+<span class="nc" id="L117">        System.out.println((&quot;AUTODETECTION ==== &quot; + autodetection));</span>
+<span class="nc" id="L118">        DigestType digestCorrect = digestType;</span>
+<span class="nc" id="L119">        byte[] passwdCorrect = &quot;AAAAAAA&quot;.getBytes();</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">        DigestType digestBad = digestType == DigestType.MAC ? DigestType.CRC32 : DigestType.MAC;</span>
+<span class="nc" id="L121">        System.out.println((&quot;DIGEST BAD === &quot; + digestBad));</span>
+<span class="nc" id="L122">        byte[] passwdBad = &quot;BBBBBBB&quot;.getBytes();</span>
+
+
+<span class="nc" id="L125">        LedgerHandle lh = null;</span>
+        try {
+<span class="nc" id="L127">            lh = bkc.createLedger(digestCorrect, passwdCorrect);</span>
+<span class="nc" id="L128">            long id = lh.getId();</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">            for (int i = 0; i &lt; 100; i++) {</span>
+<span class="nc" id="L130">                lh.addEntry(&quot;foobar&quot;.getBytes());</span>
+            }
+<span class="nc" id="L132">            lh.close();</span>
+
+            // try open with bad passwd
+            try {
+<span class="nc" id="L136">                bkc.openLedger(id, digestCorrect, passwdBad);</span>
+<span class="nc" id="L137">                fail(&quot;Shouldn't be able to open with bad passwd&quot;);</span>
+<span class="nc" id="L138">            } catch (BKException.BKUnauthorizedAccessException bke) {</span>
+                // correct behaviour
+<span class="nc" id="L140">            }</span>
+
+            // try open with bad digest
+            try {
+<span class="nc" id="L144">                System.out.println(&quot;BAD DIGEST === &quot; + digestBad);</span>
+<span class="nc" id="L145">                System.out.println(&quot; -------------------    PROVA1  -----------------------&quot;);</span>
+
+<span class="nc" id="L147">                bkc.openLedger(id, digestBad, passwdCorrect);</span>
+                /*
+                if (!autodetection) {
+                    fail(&quot;Shouldn't be able to open with bad digest&quot;);
+                }*/
+<span class="nc" id="L152">            } catch (BKException.BKDigestMatchException bke) {</span>
+<span class="nc" id="L153">                bke.printStackTrace();</span>
+                // correct behaviour
+<span class="nc bnc" id="L155" title="All 2 branches missed.">                if (autodetection) {</span>
+<span class="nc" id="L156">                    System.out.println(&quot; -------------------    PROVA2   -----------------------&quot;);</span>
+
+<span class="nc" id="L158">                    fail(&quot;Should not throw digest match exception if `autodetection` is enabled&quot;);</span>
+                }
+<span class="nc" id="L160">            }</span>
+
+            // try open with both bad
+            try {
+<span class="nc" id="L164">                System.out.println(&quot; -------------------    PROVA3   -----------------------&quot;);</span>
+
+<span class="nc" id="L166">                bkc.openLedger(id, digestBad, passwdBad);</span>
+
+<span class="nc" id="L168">                fail(&quot;Shouldn't be able to open with bad passwd and digest&quot;);</span>
+<span class="nc" id="L169">            } catch (BKException.BKUnauthorizedAccessException bke) {</span>
+                // correct behaviour
+<span class="nc" id="L171">                bke.printStackTrace();</span>
+<span class="nc" id="L172">            }</span>
+
+            // try open with both correct
+<span class="nc" id="L175">            bkc.openLedger(id, digestCorrect, passwdCorrect).close();</span>
+        } finally {
+<span class="nc bnc" id="L177" title="All 2 branches missed.">            if (lh != null) {</span>
+<span class="nc" id="L178">                lh.close();</span>
+            }
+<span class="nc" id="L180">            bkc.close();</span>
+        }
+<span class="nc" id="L182">    }</span>
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
