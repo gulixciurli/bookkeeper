@@ -1,78 +1,102 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>myReadCacheGetTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.bookie.storage.ldb</a> &gt; <span class="el_source">myReadCacheGetTest.java</span></div><h1>myReadCacheGetTest.java</h1><pre class="source lang-java linenums">package org.apache.bookkeeper.bookie.storage.ldb;
-
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>myReadCacheGetTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myTest2.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.bookie.storage.ldb</a> &gt; <span class="el_source">myReadCacheGetTest.java</span></div><h1>myReadCacheGetTest.java</h1><pre class="source lang-java linenums">package org.apache.bookkeeper.bookie.storage.ldb;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.buffer.UnpooledByteBufAllocator;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+
 import java.util.Arrays;
 import java.util.Collection;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
-@RunWith(Parameterized.class)
+@RunWith(value = Parameterized.class)
 public class myReadCacheGetTest {
 
-    private boolean exists;
-<span class="nc" id="L20">    private ReadCache cache = null;</span>
-    private ByteBuf entry;
-    private long ledgerId;
-    private long entryId;
-    private boolean expected;
+    private boolean expectedResult;
+    private long ledgerIdGet;
+    private long entryIdGet;
+    private long ledgerIdPut;
+    private long entryIdPut;
+<span class="nc" id="L23">    private ByteBuf entry = Unpooled.wrappedBuffer(new byte[1024]);</span>
+<span class="nc" id="L24">    private ReadCache cache = null;</span>
 
+<span class="nc" id="L26">    public myReadCacheGetTest(boolean expectedResult, long ledgerIdGet, long entryIdGet, long ledgerIdPut, long entryIdPut) {</span>
+<span class="nc" id="L27">        this.expectedResult = expectedResult;</span>
+<span class="nc" id="L28">        this.ledgerIdGet = ledgerIdGet;</span>
+<span class="nc" id="L29">        this.entryIdGet = entryIdGet;</span>
+<span class="nc" id="L30">        this.ledgerIdPut = ledgerIdPut;</span>
+<span class="nc" id="L31">        this.entryIdPut = entryIdPut;</span>
+<span class="nc" id="L32">    }</span>
 
     @Parameterized.Parameters
-    public static Collection&lt;?&gt; getParameter() {
-<span class="nc" id="L29">        return Arrays.asList(new Object[][] {</span>
-                //grandezza buffer per numero entry
-                //il terzo valore indica se il valore esiste nel momento della get oppure non esiste
-<span class="nc" id="L32">                { 0, -1, true, Unpooled.wrappedBuffer(new byte[64]), true},</span>
-<span class="nc" id="L33">                { 0, 1, true, Unpooled.wrappedBuffer(new byte[64]), true},</span>
-<span class="nc" id="L34">                { 1, 0, false, Unpooled.wrappedBuffer(new byte[64]), false}</span>
-        });
-    }
+    public static Collection&lt;?&gt; getTestParameters() {
+<span class="nc" id="L36">        return Arrays.asList(new Object[][]{</span>
 
-    @After
-    public void after(){
-<span class="nc" id="L40">        cache.close();</span>
-<span class="nc" id="L41">    }</span>
+<span class="nc" id="L38">                {false, -1, 0, -1, 0}, //false perche' la put di -1 fallisce</span>
+<span class="nc" id="L39">                {false, 1, 0, 0, 1}, //false perche' faccio put(1,1) e get(1,0) (anche solo uno tra ledgerID e entryID diverso porta a una get = null)</span>
+<span class="nc" id="L40">                {false, 0, 1 , 0, 3},</span>
+<span class="nc" id="L41">                {true, 1, 0, 1, 0},</span>
+<span class="nc" id="L42">                {true, 1, -1, 1, -1},</span>
+
+        });
+
+        }
 
     @Before
-    public void before(){
-<span class="nc" id="L45">        this.cache = new ReadCache(UnpooledByteBufAllocator.DEFAULT, 10 * 1024);</span>
-<span class="nc" id="L46">        this.cache.put(this.ledgerId, this.entryId, this.entry);</span>
-<span class="nc" id="L47">    }</span>
+    public void setup() {
+<span class="nc" id="L50">        cache = new ReadCache(UnpooledByteBufAllocator.DEFAULT, 10 * 1024);</span>
 
-<span class="nc" id="L49">    public myReadCacheGetTest(long ledgerId, long entryId, boolean exists, ByteBuf entry, boolean expected){</span>
-<span class="nc" id="L50">        this.ledgerId = ledgerId;</span>
-<span class="nc" id="L51">        this.entryId = entryId;</span>
-<span class="nc" id="L52">        this.entry = entry;</span>
-<span class="nc" id="L53">        this.exists = exists;</span>
-<span class="nc" id="L54">        this.expected = expected;</span>
-<span class="nc" id="L55">    }</span>
+<span class="nc" id="L52">    }</span>
 
+
+    /*
+    @Test
+    public void readCacheGetTest() {
+        boolean result;
+        ByteBuf buf = null;
+        try {
+            cache.put(ledgerIdPut, ledgerIdGet, entry);
+            result = true;
+        }catch (IllegalArgumentException e){    // se entro nell'eccezione vuol dire che ho inserito una entry del ledger = -1
+            e.printStackTrace();
+            result = false;
+        }
+        if(ledgerIdPut != ledgerIdGet) {    // cerco di fare il get di un qualcosa che non e' mai stato inserito
+            result = false;
+        }
+        else {
+            buf = cache.get(ledgerIdGet, ledgerIdPut);
+        }
+        Assert.assertEquals(result, expectedResult);
+    }
+
+     */
 
 
     @Test
-    public void get(){
-        //test per aumentare la coverage, testo qualcosa che non esiste
+    public void readCacheGetTest() {
         boolean result;
-        try{
-<span class="nc bnc" id="L64" title="All 2 branches missed.">            if(this.exists == false)</span>
-<span class="nc" id="L65">                result = this.cache.get(0, 0).equals(this.entry);</span>
-            else {
-<span class="nc" id="L67">                result = this.cache.get(this.ledgerId, this.entryId).equals(this.entry);</span>
-<span class="nc" id="L68">                System.out.println(result);</span>
-            }
-<span class="nc" id="L70">        }catch (Exception e){</span>
-<span class="nc" id="L71">            e.printStackTrace();</span>
-<span class="nc" id="L72">            result = false;</span>
-<span class="nc" id="L73">        }</span>
-<span class="nc" id="L74">        assertEquals(this.expected, result);</span>
-<span class="nc" id="L75">    }</span>
+        try {
+<span class="nc" id="L83">            cache.put(ledgerIdPut, entryIdPut, entry);</span>
+<span class="nc" id="L84">            result = cache.get(ledgerIdGet, entryIdGet).equals(entry);</span>
+<span class="nc" id="L85">        }catch (Exception e){    // se entro nell'eccezione vuol dire che ho inserito una entry del ledger = -1</span>
+            //e.printStackTrace();
+            /* entro nell'eccezione se
+            --&gt; la put non e' valida, ossia ledgerIdPut = -1
+            --&gt; sto tentando di fare una get di un qualcosa di cui prima non ho fatto la put
+             */
+<span class="nc" id="L91">            result = false;</span>
+<span class="nc" id="L92">        }</span>
 
+<span class="nc" id="L94">        Assert.assertEquals(result, expectedResult);</span>
+<span class="nc" id="L95">    }</span>
+
+    @After
+    public void tearDown() {
+<span class="nc" id="L99">        cache.close();</span>
+<span class="nc" id="L100">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
