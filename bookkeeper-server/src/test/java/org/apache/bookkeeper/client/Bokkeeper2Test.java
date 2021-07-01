@@ -89,96 +89,71 @@ public class Bokkeeper2Test extends BookKeeperClusterTestCase {
         this.digestType = DigestType.CRC32;
     }
 
+    private LedgerHandle createLedgerWithEntries(BookKeeper bk, int numOfEntries)
+            throws Exception {
+        LedgerHandle lh = bk
+                .createLedger(3, 3, digestType, "password".getBytes());
 
+        final AtomicInteger rc = new AtomicInteger(BKException.Code.OK);
+        final CountDownLatch latch = new CountDownLatch(numOfEntries);
+
+        final AddCallback cb = new AddCallback() {
+            public void addComplete(int rccb, LedgerHandle lh, long entryId,
+                                    Object ctx) {
+                rc.compareAndSet(BKException.Code.OK, rccb);
+                latch.countDown();
+            }
+        };
+        for (int i = 0; i < numOfEntries; i++) {
+            lh.asyncAddEntry("foobar".getBytes(), cb, null);
+        }
+        if (!latch.await(30, TimeUnit.SECONDS)) {
+            throw new Exception("Entries took too long to add");
+        }
+        if (rc.get() != BKException.Code.OK) {
+            throw BKException.create(rc.get());
+        }
+        return lh;
+    }
 
     /**
-     * Test that bookkeeper is not able to open ledgers if
-     * it provides the wrong password or wrong digest.
+     * Test that deleting a ledger using bookkeeper client which is closed
+     * should throw ClientClosedException.
      */
     @Test
-    public void testBookkeeperDigestPasswordWithAutoDetection() throws Exception {
-        testBookkeeperDigestPassword(true);
-    }
+    public void testDeleteLedger() throws Exception {
+        BookKeeper bk = new BookKeeper(baseClientConf, zkc);
+        LOG.info("Create ledger and add entries to it");
+        LedgerHandle lh = createLedgerWithEntries(bk, 100);
+        //LedgerHandle lh = bkc.createLedger(DigestType.CRC32, "password".getBytes()); //si crea un LedgerHandle con un ID = 0
 
-
-    @Test
-    public void testBookkeeperDigestPasswordWithoutAutoDetection() throws Exception {
-        testBookkeeperDigestPassword(false);
-    }
-
-
-
-    void testBookkeeperDigestPassword(boolean autodetection) throws Exception {
-        ClientConfiguration conf = new ClientConfiguration();
-        conf.setMetadataServiceUri(zkUtil.getMetadataServiceUri());
-        conf.setEnableDigestTypeAutodetection(autodetection);
-        BookKeeper bkc = new BookKeeper(conf);
-
-        System.out.println(("AUTODETECTION ==== " + autodetection));
-        DigestType digestCorrect = digestType;
-        byte[] passwdCorrect = "AAAAAAA".getBytes();
-        DigestType digestBad = digestType == DigestType.MAC ? DigestType.CRC32 : DigestType.MAC;
-        System.out.println(("DIGEST BAD === " + digestBad));
-        byte[] passwdBad = "BBBBBBB".getBytes();
-
-
-        LedgerHandle lh = null;
+        LOG.info("Closing bookkeeper client");
+        bk.close();
         try {
-            lh = bkc.createLedger(digestCorrect, passwdCorrect);
-            long id = lh.getId();
-            for (int i = 0; i < 100; i++) {
-                lh.addEntry("foobar".getBytes());
-            }
-            lh.close();
-
-            // try open with bad passwd
-            try {
-                bkc.openLedger(id, digestCorrect, passwdBad);
-                fail("Shouldn't be able to open with bad passwd");
-            } catch (BKException.BKUnauthorizedAccessException bke) {
-                // correct behaviour
-            }
-
-            // try open with bad digest
-            try {
-                System.out.println("BAD DIGEST === " + digestBad);
-                System.out.println(" -------------------    PROVA1  -----------------------");
-
-                bkc.openLedger(id, digestBad, passwdCorrect);
-                /*
-                if (!autodetection) {
-                    fail("Shouldn't be able to open with bad digest");
-                }*/
-            } catch (BKException.BKDigestMatchException bke) {
-                bke.printStackTrace();
-                // correct behaviour
-                if (autodetection) {
-                    System.out.println(" -------------------    PROVA2   -----------------------");
-
-                    fail("Should not throw digest match exception if `autodetection` is enabled");
-                }
-            }
-
-            // try open with both bad
-            try {
-                System.out.println(" -------------------    PROVA3   -----------------------");
-
-                bkc.openLedger(id, digestBad, passwdBad);
-
-                fail("Shouldn't be able to open with bad passwd and digest");
-            } catch (BKException.BKUnauthorizedAccessException bke) {
-                // correct behaviour
-                bke.printStackTrace();
-            }
-
-            // try open with both correct
-            bkc.openLedger(id, digestCorrect, passwdCorrect).close();
-        } finally {
-            if (lh != null) {
-                lh.close();
-            }
-            bkc.close();
+            bk.deleteLedger(lh.getId());
+            fail("should have failed, client is closed");
+        } catch (BKException.BKClientClosedException e) {
+            // correct
         }
+
+        // using async, because this could trigger an assertion
+        final AtomicInteger returnCode = new AtomicInteger(0);
+        final CountDownLatch openLatch = new CountDownLatch(1);
+
+        AsyncCallback.DeleteCallback cb = new AsyncCallback.DeleteCallback(){
+            public void deleteComplete(int rc, Object ctx) {
+                returnCode.set(rc);
+                openLatch.countDown();
+            }
+        };
+        System.out.println("provaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        bk.asyncDeleteLedger(50, cb, null);
+
+        LOG.info("Waiting to delete the ledger asynchronously");
+        assertTrue("Delete call should have completed",
+                openLatch.await(20, TimeUnit.SECONDS));
+        assertEquals("Delete should not have succeeded through closed bkclient!",
+                BKException.Code.ClientClosedException, returnCode.get());
     }
 
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LedgerHandle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myBookkeeperOpenLedgerTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">LedgerHandle.java</span></div><h1>LedgerHandle.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LedgerHandle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$Bokkeeper2Test.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">LedgerHandle.java</span></div><h1>LedgerHandle.java</h1><pre class="source lang-java linenums">/*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -267,13 +267,13 @@ public class LedgerHandle implements WriteHandle {
         // If sticky bookie reads are enabled, switch the sticky bookie to the
         // next bookie in the ensemble so that we avoid to keep reading from the
         // same failed bookie
-<span class="pc bpc" id="L270" title="1 of 2 branches missed.">        if (stickyBookieIndex != STICKY_READ_BOOKIE_INDEX_UNSET) {</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">        if (stickyBookieIndex != STICKY_READ_BOOKIE_INDEX_UNSET) {</span>
             // This will be idempotent when we have multiple read errors on the
             // same bookie. The net result is that we just go to the next bookie
 <span class="nc" id="L273">            stickyBookieIndex = clientCtx.getPlacementPolicy().getStickyReadBookieIndex(getLedgerMetadata(),</span>
 <span class="nc" id="L274">                    Optional.of(bookieIndex));</span>
         }
-<span class="fc" id="L276">    }</span>
+<span class="nc" id="L276">    }</span>
 
     protected void initializeWriteHandleState() {
 <span class="pc bpc" id="L279" title="1 of 2 branches missed.">        if (clientCtx.getConf().explicitLacInterval &gt; 0) {</span>
@@ -358,20 +358,20 @@ public class LedgerHandle implements WriteHandle {
     }
 
     Versioned&lt;LedgerMetadata&gt; getVersionedLedgerMetadata() {
-<span class="fc" id="L361">        return versionedMetadata;</span>
+<span class="nc" id="L361">        return versionedMetadata;</span>
     }
 
     boolean setLedgerMetadata(Versioned&lt;LedgerMetadata&gt; expected, Versioned&lt;LedgerMetadata&gt; newMetadata) {
-<span class="fc" id="L365">        synchronized (this) {</span>
+<span class="nc" id="L365">        synchronized (this) {</span>
             // ensure that we only update the metadata if it is the object we expect it to be
-<span class="pc bpc" id="L367" title="1 of 2 branches missed.">            if (versionedMetadata == expected) {</span>
-<span class="fc" id="L368">                versionedMetadata = newMetadata;</span>
-<span class="fc" id="L369">                LedgerMetadata metadata = versionedMetadata.getValue();</span>
-<span class="fc bfc" id="L370" title="All 2 branches covered.">                if (metadata.isClosed()) {</span>
-<span class="fc" id="L371">                    lastAddConfirmed = lastAddPushed = metadata.getLastEntryId();</span>
-<span class="fc" id="L372">                    length = metadata.getLength();</span>
+<span class="nc bnc" id="L367" title="All 2 branches missed.">            if (versionedMetadata == expected) {</span>
+<span class="nc" id="L368">                versionedMetadata = newMetadata;</span>
+<span class="nc" id="L369">                LedgerMetadata metadata = versionedMetadata.getValue();</span>
+<span class="nc bnc" id="L370" title="All 2 branches missed.">                if (metadata.isClosed()) {</span>
+<span class="nc" id="L371">                    lastAddConfirmed = lastAddPushed = metadata.getLastEntryId();</span>
+<span class="nc" id="L372">                    length = metadata.getLength();</span>
                 }
-<span class="fc" id="L374">                return true;</span>
+<span class="nc" id="L374">                return true;</span>
             } else {
 <span class="nc" id="L376">                return false;</span>
             }
@@ -427,8 +427,8 @@ public class LedgerHandle implements WriteHandle {
      * @return the length of the ledger after the addition
      */
     synchronized long addToLength(long delta) {
-<span class="nc" id="L430">        this.length += delta;</span>
-<span class="nc" id="L431">        return this.length;</span>
+<span class="fc" id="L430">        this.length += delta;</span>
+<span class="fc" id="L431">        return this.length;</span>
     }
 
     /**
@@ -456,7 +456,7 @@ public class LedgerHandle implements WriteHandle {
      * @return DistributionSchedule for the LedgerHandle
      */
     DistributionSchedule getDistributionSchedule() {
-<span class="nc" id="L459">        return distributionSchedule;</span>
+<span class="fc" id="L459">        return distributionSchedule;</span>
     }
 
     /**
@@ -509,11 +509,11 @@ public class LedgerHandle implements WriteHandle {
      */
     @Override
     public synchronized boolean isClosed() {
-<span class="fc" id="L512">        return getLedgerMetadata().isClosed();</span>
+<span class="nc" id="L512">        return getLedgerMetadata().isClosed();</span>
     }
 
     boolean isHandleWritable() {
-<span class="nc bnc" id="L516" title="All 4 branches missed.">        return !getLedgerMetadata().isClosed() &amp;&amp; handleState == HandleState.OPEN;</span>
+<span class="pc bpc" id="L516" title="2 of 4 branches missed.">        return !getLedgerMetadata().isClosed() &amp;&amp; handleState == HandleState.OPEN;</span>
     }
 
     void asyncCloseInternal(final CloseCallback cb, final Object ctx, final int rc) {
@@ -1000,8 +1000,8 @@ public class LedgerHandle implements WriteHandle {
      */
     public void asyncAddEntry(final byte[] data, final AddCallback cb,
                               final Object ctx) {
-<span class="nc" id="L1003">        asyncAddEntry(data, 0, data.length, cb, ctx);</span>
-<span class="nc" id="L1004">    }</span>
+<span class="fc" id="L1003">        asyncAddEntry(data, 0, data.length, cb, ctx);</span>
+<span class="fc" id="L1004">    }</span>
 
     /**
      * Add entry asynchronously to an open ledger. This can be used only with
@@ -1042,19 +1042,19 @@ public class LedgerHandle implements WriteHandle {
      */
     public void asyncAddEntry(final byte[] data, final int offset, final int length,
                               final AddCallback cb, final Object ctx) {
-<span class="nc bnc" id="L1045" title="All 6 branches missed.">        if (offset &lt; 0 || length &lt; 0 || (offset + length) &gt; data.length) {</span>
+<span class="pc bpc" id="L1045" title="3 of 6 branches missed.">        if (offset &lt; 0 || length &lt; 0 || (offset + length) &gt; data.length) {</span>
 <span class="nc" id="L1046">            throw new ArrayIndexOutOfBoundsException(</span>
                     &quot;Invalid values for offset(&quot; + offset
                     + &quot;) or length(&quot; + length + &quot;)&quot;);
         }
 
-<span class="nc" id="L1051">        asyncAddEntry(Unpooled.wrappedBuffer(data, offset, length), cb, ctx);</span>
-<span class="nc" id="L1052">    }</span>
+<span class="fc" id="L1051">        asyncAddEntry(Unpooled.wrappedBuffer(data, offset, length), cb, ctx);</span>
+<span class="fc" id="L1052">    }</span>
 
     public void asyncAddEntry(ByteBuf data, final AddCallback cb, final Object ctx) {
-<span class="nc" id="L1055">        PendingAddOp op = PendingAddOp.create(this, clientCtx, getCurrentEnsemble(), data, writeFlags, cb, ctx);</span>
-<span class="nc" id="L1056">        doAsyncAddEntry(op);</span>
-<span class="nc" id="L1057">    }</span>
+<span class="fc" id="L1055">        PendingAddOp op = PendingAddOp.create(this, clientCtx, getCurrentEnsemble(), data, writeFlags, cb, ctx);</span>
+<span class="fc" id="L1056">        doAsyncAddEntry(op);</span>
+<span class="fc" id="L1057">    }</span>
 
     /**
      * Add entry asynchronously to an open ledger, using an offset and range.
@@ -1241,8 +1241,8 @@ public class LedgerHandle implements WriteHandle {
 
     protected boolean waitForWritable(DistributionSchedule.WriteSet writeSet, long key,
                                     int allowedNonWritableCount, long durationMs) {
-<span class="nc bnc" id="L1244" title="All 2 branches missed.">        if (durationMs &lt; 0) {</span>
-<span class="nc" id="L1245">            return true;</span>
+<span class="pc bpc" id="L1244" title="1 of 2 branches missed.">        if (durationMs &lt; 0) {</span>
+<span class="fc" id="L1245">            return true;</span>
         }
 
 <span class="nc" id="L1248">        final long startTime = MathUtils.nowInNano();</span>
@@ -1294,27 +1294,27 @@ public class LedgerHandle implements WriteHandle {
     }
 
     protected void doAsyncAddEntry(final PendingAddOp op) {
-<span class="nc bnc" id="L1297" title="All 2 branches missed.">        if (throttler != null) {</span>
-<span class="nc" id="L1298">            throttler.acquire();</span>
+<span class="pc bpc" id="L1297" title="1 of 2 branches missed.">        if (throttler != null) {</span>
+<span class="fc" id="L1298">            throttler.acquire();</span>
         }
 
-<span class="nc" id="L1301">        boolean wasClosed = false;</span>
-<span class="nc" id="L1302">        synchronized (this) {</span>
+<span class="fc" id="L1301">        boolean wasClosed = false;</span>
+<span class="fc" id="L1302">        synchronized (this) {</span>
             // synchronized on this to ensure that
             // the ledger isn't closed between checking and
             // updating lastAddPushed
-<span class="nc bnc" id="L1306" title="All 2 branches missed.">            if (isHandleWritable()) {</span>
-<span class="nc" id="L1307">                long entryId = ++lastAddPushed;</span>
-<span class="nc" id="L1308">                long currentLedgerLength = addToLength(op.payload.readableBytes());</span>
-<span class="nc" id="L1309">                op.setEntryId(entryId);</span>
-<span class="nc" id="L1310">                op.setLedgerLength(currentLedgerLength);</span>
-<span class="nc" id="L1311">                pendingAddOps.add(op);</span>
-<span class="nc" id="L1312">            } else {</span>
+<span class="pc bpc" id="L1306" title="1 of 2 branches missed.">            if (isHandleWritable()) {</span>
+<span class="fc" id="L1307">                long entryId = ++lastAddPushed;</span>
+<span class="fc" id="L1308">                long currentLedgerLength = addToLength(op.payload.readableBytes());</span>
+<span class="fc" id="L1309">                op.setEntryId(entryId);</span>
+<span class="fc" id="L1310">                op.setLedgerLength(currentLedgerLength);</span>
+<span class="fc" id="L1311">                pendingAddOps.add(op);</span>
+<span class="fc" id="L1312">            } else {</span>
 <span class="nc" id="L1313">                wasClosed = true;</span>
             }
-<span class="nc" id="L1315">        }</span>
+<span class="fc" id="L1315">        }</span>
 
-<span class="nc bnc" id="L1317" title="All 2 branches missed.">        if (wasClosed) {</span>
+<span class="pc bpc" id="L1317" title="1 of 2 branches missed.">        if (wasClosed) {</span>
             // make sure the callback is triggered in main worker pool
             try {
 <span class="nc" id="L1320">                clientCtx.getMainWorkerPool().executeOrdered(ledgerId, new SafeRunnable() {</span>
@@ -1338,23 +1338,23 @@ public class LedgerHandle implements WriteHandle {
 <span class="nc" id="L1338">            return;</span>
         }
 
-<span class="nc" id="L1341">        DistributionSchedule.WriteSet ws = distributionSchedule.getWriteSet(op.getEntryId());</span>
+<span class="fc" id="L1341">        DistributionSchedule.WriteSet ws = distributionSchedule.getWriteSet(op.getEntryId());</span>
         try {
-<span class="nc bnc" id="L1343" title="All 2 branches missed.">            if (!waitForWritable(ws, op.getEntryId(), 0, clientCtx.getConf().waitForWriteSetMs)) {</span>
+<span class="pc bpc" id="L1343" title="1 of 2 branches missed.">            if (!waitForWritable(ws, op.getEntryId(), 0, clientCtx.getConf().waitForWriteSetMs)) {</span>
 <span class="nc" id="L1344">                op.allowFailFastOnUnwritableChannel();</span>
             }
         } finally {
-<span class="nc" id="L1347">            ws.recycle();</span>
+<span class="fc" id="L1347">            ws.recycle();</span>
         }
 
         try {
-<span class="nc" id="L1351">            clientCtx.getMainWorkerPool().executeOrdered(ledgerId, op);</span>
+<span class="fc" id="L1351">            clientCtx.getMainWorkerPool().executeOrdered(ledgerId, op);</span>
 <span class="nc" id="L1352">        } catch (RejectedExecutionException e) {</span>
 <span class="nc" id="L1353">            op.cb.addCompleteWithLatency(</span>
 <span class="nc" id="L1354">                    BookKeeper.getReturnRc(clientCtx.getBookieClient(), BKException.Code.InterruptedException),</span>
                     LedgerHandle.this, INVALID_ENTRY_ID, 0, op.ctx);
-<span class="nc" id="L1356">        }</span>
-<span class="nc" id="L1357">    }</span>
+<span class="fc" id="L1356">        }</span>
+<span class="fc" id="L1357">    }</span>
 
     synchronized void updateLastConfirmed(long lac, long len) {
 <span class="nc bnc" id="L1360" title="All 2 branches missed.">        if (lac &gt; lastAddConfirmed) {</span>
@@ -1796,16 +1796,16 @@ public class LedgerHandle implements WriteHandle {
         // entries that have had all their responses come back
         PendingAddOp pendingAddOp;
 
-<span class="nc bnc" id="L1799" title="All 4 branches missed.">        while ((pendingAddOp = pendingAddOps.peek()) != null</span>
+<span class="pc bpc" id="L1799" title="1 of 4 branches missed.">        while ((pendingAddOp = pendingAddOps.peek()) != null</span>
                &amp;&amp; !changingEnsemble) {
-<span class="nc bnc" id="L1801" title="All 2 branches missed.">            if (!pendingAddOp.completed) {</span>
-<span class="nc bnc" id="L1802" title="All 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="fc bfc" id="L1801" title="All 2 branches covered.">            if (!pendingAddOp.completed) {</span>
+<span class="pc bpc" id="L1802" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
 <span class="nc" id="L1803">                    LOG.debug(&quot;pending add not completed: {}&quot;, pendingAddOp);</span>
                 }
-<span class="nc" id="L1805">                return;</span>
+<span class="fc" id="L1805">                return;</span>
             }
             // Check if it is the next entry in the sequence.
-<span class="nc bnc" id="L1808" title="All 4 branches missed.">            if (pendingAddOp.entryId != 0 &amp;&amp; pendingAddOp.entryId != pendingAddsSequenceHead + 1) {</span>
+<span class="pc bpc" id="L1808" title="1 of 4 branches missed.">            if (pendingAddOp.entryId != 0 &amp;&amp; pendingAddOp.entryId != pendingAddsSequenceHead + 1) {</span>
 <span class="nc bnc" id="L1809" title="All 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
 <span class="nc" id="L1810">                    LOG.debug(&quot;Head of the queue entryId: {} is not the expected value: {}&quot;, pendingAddOp.entryId,</span>
 <span class="nc" id="L1811">                               pendingAddsSequenceHead + 1);</span>
@@ -1813,17 +1813,17 @@ public class LedgerHandle implements WriteHandle {
 <span class="nc" id="L1813">                return;</span>
             }
 
-<span class="nc" id="L1816">            pendingAddOps.remove();</span>
-<span class="nc" id="L1817">            explicitLacFlushPolicy.updatePiggyBackedLac(lastAddConfirmed);</span>
-<span class="nc" id="L1818">            pendingAddsSequenceHead = pendingAddOp.entryId;</span>
-<span class="nc bnc" id="L1819" title="All 2 branches missed.">            if (!writeFlags.contains(WriteFlag.DEFERRED_SYNC)) {</span>
-<span class="nc" id="L1820">                this.lastAddConfirmed = pendingAddsSequenceHead;</span>
+<span class="fc" id="L1816">            pendingAddOps.remove();</span>
+<span class="fc" id="L1817">            explicitLacFlushPolicy.updatePiggyBackedLac(lastAddConfirmed);</span>
+<span class="fc" id="L1818">            pendingAddsSequenceHead = pendingAddOp.entryId;</span>
+<span class="pc bpc" id="L1819" title="1 of 2 branches missed.">            if (!writeFlags.contains(WriteFlag.DEFERRED_SYNC)) {</span>
+<span class="fc" id="L1820">                this.lastAddConfirmed = pendingAddsSequenceHead;</span>
             }
 
-<span class="nc" id="L1823">            pendingAddOp.submitCallback(BKException.Code.OK);</span>
+<span class="fc" id="L1823">            pendingAddOp.submitCallback(BKException.Code.OK);</span>
         }
 
-<span class="nc" id="L1826">    }</span>
+<span class="fc" id="L1826">    }</span>
 
     @VisibleForTesting
     boolean hasDelayedWriteFailedBookies() {
@@ -1837,9 +1837,9 @@ public class LedgerHandle implements WriteHandle {
 <span class="nc" id="L1837">    }</span>
 
     void maybeHandleDelayedWriteBookieFailure() {
-<span class="nc" id="L1840">        synchronized (metadataLock) {</span>
-<span class="nc bnc" id="L1841" title="All 2 branches missed.">            if (delayedWriteFailedBookies.isEmpty()) {</span>
-<span class="nc" id="L1842">                return;</span>
+<span class="fc" id="L1840">        synchronized (metadataLock) {</span>
+<span class="pc bpc" id="L1841" title="1 of 2 branches missed.">            if (delayedWriteFailedBookies.isEmpty()) {</span>
+<span class="fc" id="L1842">                return;</span>
             }
 <span class="nc" id="L1844">            Map&lt;Integer, BookieSocketAddress&gt; toReplace = new HashMap&lt;&gt;(delayedWriteFailedBookies);</span>
 <span class="nc" id="L1845">            delayedWriteFailedBookies.clear();</span>
@@ -2038,7 +2038,7 @@ public class LedgerHandle implements WriteHandle {
      * This will include all bookies that are cotna
      */
     WriteSet getWriteSetForReadOperation(long entryId) {
-<span class="pc bpc" id="L2041" title="1 of 2 branches missed.">        if (stickyBookieIndex != STICKY_READ_BOOKIE_INDEX_UNSET) {</span>
+<span class="nc bnc" id="L2041" title="All 2 branches missed.">        if (stickyBookieIndex != STICKY_READ_BOOKIE_INDEX_UNSET) {</span>
             // When sticky reads are enabled we want to make sure to take
             // advantage of read-ahead (or, anyway, from efficiencies in
             // reading sequential data from disk through the page cache).
@@ -2058,7 +2058,7 @@ public class LedgerHandle implements WriteHandle {
             // stored
 <span class="nc" id="L2059">            return distributionSchedule.getWriteSet(stickyBookieIndex);</span>
         } else {
-<span class="fc" id="L2061">            return distributionSchedule.getWriteSet(entryId);</span>
+<span class="nc" id="L2061">            return distributionSchedule.getWriteSet(entryId);</span>
         }
     }
 }

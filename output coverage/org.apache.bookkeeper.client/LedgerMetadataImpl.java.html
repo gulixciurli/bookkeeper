@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LedgerMetadataImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myBookkeeperOpenLedgerTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">LedgerMetadataImpl.java</span></div><h1>LedgerMetadataImpl.java</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LedgerMetadataImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$Bokkeeper2Test.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">LedgerMetadataImpl.java</span></div><h1>LedgerMetadataImpl.java</h1><pre class="source lang-java linenums">/**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -86,9 +86,9 @@ class LedgerMetadataImpl implements LedgerMetadata {
                        long cToken,
 <span class="fc" id="L87">                       Map&lt;String, byte[]&gt; customMetadata) {</span>
 <span class="pc bpc" id="L88" title="1 of 2 branches missed.">        checkArgument(ensembles.size() &gt; 0, &quot;There must be at least one ensemble in the ledger&quot;);</span>
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (state == State.CLOSED) {</span>
-<span class="fc" id="L90">            checkArgument(length.isPresent(), &quot;Closed ledger must have a length&quot;);</span>
-<span class="fc" id="L91">            checkArgument(lastEntryId.isPresent(), &quot;Closed ledger must have a last entry&quot;);</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (state == State.CLOSED) {</span>
+<span class="nc" id="L90">            checkArgument(length.isPresent(), &quot;Closed ledger must have a length&quot;);</span>
+<span class="nc" id="L91">            checkArgument(lastEntryId.isPresent(), &quot;Closed ledger must have a last entry&quot;);</span>
         } else {
 <span class="pc bpc" id="L93" title="1 of 2 branches missed.">            checkArgument(!length.isPresent(), &quot;Non-closed ledger must not have a length&quot;);</span>
 <span class="pc bpc" id="L94" title="1 of 2 branches missed.">            checkArgument(!lastEntryId.isPresent(), &quot;Non-closed ledger must not have a last entry&quot;);</span>
@@ -112,10 +112,10 @@ class LedgerMetadataImpl implements LedgerMetadata {
 <span class="fc" id="L112">                                                                      ImmutableList.copyOf(e.getValue())),</span>
                                                       TreeMap::putAll));
 
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (state != State.CLOSED) {</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        if (state != State.CLOSED) {</span>
 <span class="fc" id="L116">            currentEnsemble = this.ensembles.lastEntry().getValue();</span>
         } else {
-<span class="fc" id="L118">            currentEnsemble = null;</span>
+<span class="nc" id="L118">            currentEnsemble = null;</span>
         }
 
 <span class="pc bpc" id="L121" title="1 of 2 branches missed.">        if (password.isPresent()) {</span>
@@ -201,7 +201,7 @@ class LedgerMetadataImpl implements LedgerMetadata {
 
     @Override
     public boolean isClosed() {
-<span class="fc bfc" id="L204" title="All 2 branches covered.">        return state == State.CLOSED;</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        return state == State.CLOSED;</span>
     }
 
     @Override

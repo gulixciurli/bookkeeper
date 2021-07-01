@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PendingReadOp.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myBookkeeperOpenLedgerTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">PendingReadOp.java</span></div><h1>PendingReadOp.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PendingReadOp.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$Bokkeeper2Test.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">PendingReadOp.java</span></div><h1>PendingReadOp.java</h1><pre class="source lang-java linenums">/*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -56,14 +56,14 @@ import org.slf4j.LoggerFactory;
  *
  */
 class PendingReadOp implements ReadEntryCallback, SafeRunnable {
-<span class="fc" id="L59">    private static final Logger LOG = LoggerFactory.getLogger(PendingReadOp.class);</span>
+<span class="nc" id="L59">    private static final Logger LOG = LoggerFactory.getLogger(PendingReadOp.class);</span>
 
-<span class="fc" id="L61">    private ScheduledFuture&lt;?&gt; speculativeTask = null;</span>
+<span class="nc" id="L61">    private ScheduledFuture&lt;?&gt; speculativeTask = null;</span>
     protected final List&lt;LedgerEntryRequest&gt; seq;
     private final CompletableFuture&lt;LedgerEntries&gt; future;
     private final Set&lt;BookieSocketAddress&gt; heardFromHosts;
     private final BitSet heardFromHostsBitSet;
-<span class="fc" id="L66">    private final Set&lt;BookieSocketAddress&gt; sentToHosts = new HashSet&lt;BookieSocketAddress&gt;();</span>
+<span class="nc" id="L66">    private final Set&lt;BookieSocketAddress&gt; sentToHosts = new HashSet&lt;BookieSocketAddress&gt;();</span>
     LedgerHandle lh;
     final ClientContext clientCtx;
 
@@ -75,43 +75,43 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
     final int requiredBookiesMissingEntryForRecovery;
     final boolean isRecoveryRead;
 
-<span class="fc" id="L78">    boolean parallelRead = false;</span>
-<span class="fc" id="L79">    final AtomicBoolean complete = new AtomicBoolean(false);</span>
-<span class="fc" id="L80">    boolean allowFailFast = false;</span>
+<span class="nc" id="L78">    boolean parallelRead = false;</span>
+<span class="nc" id="L79">    final AtomicBoolean complete = new AtomicBoolean(false);</span>
+<span class="nc" id="L80">    boolean allowFailFast = false;</span>
 
     abstract class LedgerEntryRequest implements SpeculativeRequestExecutor, AutoCloseable {
 
-<span class="fc" id="L84">        final AtomicBoolean complete = new AtomicBoolean(false);</span>
+<span class="nc" id="L84">        final AtomicBoolean complete = new AtomicBoolean(false);</span>
 
-<span class="fc" id="L86">        int rc = BKException.Code.OK;</span>
-<span class="fc" id="L87">        int firstError = BKException.Code.OK;</span>
-<span class="fc" id="L88">        int numBookiesMissingEntry = 0;</span>
+<span class="nc" id="L86">        int rc = BKException.Code.OK;</span>
+<span class="nc" id="L87">        int firstError = BKException.Code.OK;</span>
+<span class="nc" id="L88">        int numBookiesMissingEntry = 0;</span>
 
         final List&lt;BookieSocketAddress&gt; ensemble;
         final DistributionSchedule.WriteSet writeSet;
         final LedgerEntryImpl entryImpl;
         final long eId;
 
-<span class="fc" id="L95">        LedgerEntryRequest(List&lt;BookieSocketAddress&gt; ensemble, long lId, long eId) {</span>
-<span class="fc" id="L96">            this.entryImpl = LedgerEntryImpl.create(lId, eId);</span>
-<span class="fc" id="L97">            this.ensemble = ensemble;</span>
-<span class="fc" id="L98">            this.eId = eId;</span>
+<span class="nc" id="L95">        LedgerEntryRequest(List&lt;BookieSocketAddress&gt; ensemble, long lId, long eId) {</span>
+<span class="nc" id="L96">            this.entryImpl = LedgerEntryImpl.create(lId, eId);</span>
+<span class="nc" id="L97">            this.ensemble = ensemble;</span>
+<span class="nc" id="L98">            this.eId = eId;</span>
 
-<span class="pc bpc" id="L100" title="1 of 2 branches missed.">            if (clientCtx.getConf().enableReorderReadSequence) {</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">            if (clientCtx.getConf().enableReorderReadSequence) {</span>
 <span class="nc" id="L101">                writeSet = clientCtx.getPlacementPolicy()</span>
 <span class="nc" id="L102">                    .reorderReadSequence(</span>
                             ensemble,
 <span class="nc" id="L104">                            lh.getBookiesHealthInfo(),</span>
 <span class="nc" id="L105">                            lh.getWriteSetForReadOperation(eId));</span>
             } else {
-<span class="fc" id="L107">                writeSet = lh.getWriteSetForReadOperation(eId);</span>
+<span class="nc" id="L107">                writeSet = lh.getWriteSetForReadOperation(eId);</span>
             }
-<span class="fc" id="L109">        }</span>
+<span class="nc" id="L109">        }</span>
 
         @Override
         public void close() {
-<span class="fc" id="L113">            entryImpl.close();</span>
-<span class="fc" id="L114">        }</span>
+<span class="nc" id="L113">            entryImpl.close();</span>
+<span class="nc" id="L114">        }</span>
 
         /**
          * Execute the read request.
@@ -166,11 +166,11 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
          * @return true if we managed to fail the entry; otherwise return false if it already failed or completed.
          */
         boolean fail(int rc) {
-<span class="pc bpc" id="L169" title="1 of 2 branches missed.">            if (complete.compareAndSet(false, true)) {</span>
-<span class="fc" id="L170">                this.rc = rc;</span>
-<span class="fc" id="L171">                submitCallback(rc);</span>
-<span class="fc" id="L172">                writeSet.recycle();</span>
-<span class="fc" id="L173">                return true;</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">            if (complete.compareAndSet(false, true)) {</span>
+<span class="nc" id="L170">                this.rc = rc;</span>
+<span class="nc" id="L171">                submitCallback(rc);</span>
+<span class="nc" id="L172">                writeSet.recycle();</span>
+<span class="nc" id="L173">                return true;</span>
             } else {
 <span class="nc" id="L175">                return false;</span>
             }
@@ -189,10 +189,10 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
          *          read result code
          */
         synchronized void logErrorAndReattemptRead(int bookieIndex, BookieSocketAddress host, String errMsg, int rc) {
-<span class="pc bpc" id="L192" title="5 of 6 branches missed.">            if (BKException.Code.OK == firstError</span>
+<span class="nc bnc" id="L192" title="All 6 branches missed.">            if (BKException.Code.OK == firstError</span>
                 || BKException.Code.NoSuchEntryException == firstError
                 || BKException.Code.NoSuchLedgerExistsException == firstError) {
-<span class="fc" id="L195">                firstError = rc;</span>
+<span class="nc" id="L195">                firstError = rc;</span>
 <span class="nc bnc" id="L196" title="All 6 branches missed.">            } else if (BKException.Code.BookieHandleNotAvailableException == firstError</span>
                        &amp;&amp; BKException.Code.NoSuchEntryException != rc
                        &amp;&amp; BKException.Code.NoSuchLedgerExistsException != rc) {
@@ -201,10 +201,10 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
                 // failed.
 <span class="nc" id="L202">                firstError = rc;</span>
             }
-<span class="pc bpc" id="L204" title="3 of 4 branches missed.">            if (BKException.Code.NoSuchEntryException == rc</span>
+<span class="nc bnc" id="L204" title="All 4 branches missed.">            if (BKException.Code.NoSuchEntryException == rc</span>
                 || BKException.Code.NoSuchLedgerExistsException == rc) {
-<span class="fc" id="L206">                ++numBookiesMissingEntry;</span>
-<span class="pc bpc" id="L207" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L206">                ++numBookiesMissingEntry;</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
 <span class="nc" id="L208">                    LOG.debug(&quot;No such entry found on bookie.  L{} E{} bookie: {}&quot;,</span>
 <span class="nc" id="L209">                            lh.ledgerId, eId, host);</span>
                 }
@@ -215,8 +215,8 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
                 }
             }
 
-<span class="fc" id="L218">            lh.recordReadErrorOnBookie(bookieIndex);</span>
-<span class="fc" id="L219">        }</span>
+<span class="nc" id="L218">            lh.recordReadErrorOnBookie(bookieIndex);</span>
+<span class="nc" id="L219">        }</span>
 
         /**
          * Send to next replica speculatively, if required and possible.
@@ -234,7 +234,7 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
          * @return true if the read request is completed.
          */
         boolean isComplete() {
-<span class="fc" id="L237">            return complete.get();</span>
+<span class="nc" id="L237">            return complete.get();</span>
         }
 
         /**
@@ -243,7 +243,7 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
          * @return result code.
          */
         int getRc() {
-<span class="fc" id="L246">            return rc;</span>
+<span class="nc" id="L246">            return rc;</span>
         }
 
         @Override
@@ -325,17 +325,17 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
 
     class SequenceReadRequest extends LedgerEntryRequest {
         static final int NOT_FOUND = -1;
-<span class="fc" id="L328">        int nextReplicaIndexToReadFrom = 0;</span>
+<span class="nc" id="L328">        int nextReplicaIndexToReadFrom = 0;</span>
 
         final BitSet sentReplicas;
         final BitSet erroredReplicas;
 
-<span class="fc" id="L333">        SequenceReadRequest(List&lt;BookieSocketAddress&gt; ensemble, long lId, long eId) {</span>
-<span class="fc" id="L334">            super(ensemble, lId, eId);</span>
+<span class="nc" id="L333">        SequenceReadRequest(List&lt;BookieSocketAddress&gt; ensemble, long lId, long eId) {</span>
+<span class="nc" id="L334">            super(ensemble, lId, eId);</span>
 
-<span class="fc" id="L336">            this.sentReplicas = new BitSet(lh.getLedgerMetadata().getWriteQuorumSize());</span>
-<span class="fc" id="L337">            this.erroredReplicas = new BitSet(lh.getLedgerMetadata().getWriteQuorumSize());</span>
-<span class="fc" id="L338">        }</span>
+<span class="nc" id="L336">            this.sentReplicas = new BitSet(lh.getLedgerMetadata().getWriteQuorumSize());</span>
+<span class="nc" id="L337">            this.erroredReplicas = new BitSet(lh.getLedgerMetadata().getWriteQuorumSize());</span>
+<span class="nc" id="L338">        }</span>
 
         private synchronized int getNextReplicaIndexToReadFrom() {
 <span class="nc" id="L341">            return nextReplicaIndexToReadFrom;</span>
@@ -383,11 +383,11 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
 
         @Override
         void read() {
-<span class="fc" id="L386">            sendNextRead();</span>
-<span class="fc" id="L387">        }</span>
+<span class="nc" id="L386">            sendNextRead();</span>
+<span class="nc" id="L387">        }</span>
 
         synchronized BookieSocketAddress sendNextRead() {
-<span class="pc bpc" id="L390" title="1 of 2 branches missed.">            if (nextReplicaIndexToReadFrom &gt;= getLedgerMetadata().getWriteQuorumSize()) {</span>
+<span class="nc bnc" id="L390" title="All 2 branches missed.">            if (nextReplicaIndexToReadFrom &gt;= getLedgerMetadata().getWriteQuorumSize()) {</span>
                 // we are done, the read has failed from all replicas, just fail the
                 // read
 <span class="nc" id="L393">                fail(firstError);</span>
@@ -396,16 +396,16 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
 
             // ToDo: pick replica with writable PCBC. ISSUE #1239
             // https://github.com/apache/bookkeeper/issues/1239
-<span class="fc" id="L399">            int replica = nextReplicaIndexToReadFrom;</span>
-<span class="fc" id="L400">            int bookieIndex = writeSet.get(nextReplicaIndexToReadFrom);</span>
-<span class="fc" id="L401">            nextReplicaIndexToReadFrom++;</span>
+<span class="nc" id="L399">            int replica = nextReplicaIndexToReadFrom;</span>
+<span class="nc" id="L400">            int bookieIndex = writeSet.get(nextReplicaIndexToReadFrom);</span>
+<span class="nc" id="L401">            nextReplicaIndexToReadFrom++;</span>
 
             try {
-<span class="fc" id="L404">                BookieSocketAddress to = ensemble.get(bookieIndex);</span>
-<span class="fc" id="L405">                sendReadTo(bookieIndex, to, this);</span>
-<span class="fc" id="L406">                sentToHosts.add(to);</span>
-<span class="fc" id="L407">                sentReplicas.set(replica);</span>
-<span class="fc" id="L408">                return to;</span>
+<span class="nc" id="L404">                BookieSocketAddress to = ensemble.get(bookieIndex);</span>
+<span class="nc" id="L405">                sendReadTo(bookieIndex, to, this);</span>
+<span class="nc" id="L406">                sentToHosts.add(to);</span>
+<span class="nc" id="L407">                sentReplicas.set(replica);</span>
+<span class="nc" id="L408">                return to;</span>
 <span class="nc" id="L409">            } catch (InterruptedException ie) {</span>
 <span class="nc" id="L410">                LOG.error(&quot;Interrupted reading entry &quot; + this, ie);</span>
 <span class="nc" id="L411">                Thread.currentThread().interrupt();</span>
@@ -416,20 +416,20 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
 
         @Override
         synchronized void logErrorAndReattemptRead(int bookieIndex, BookieSocketAddress host, String errMsg, int rc) {
-<span class="fc" id="L419">            super.logErrorAndReattemptRead(bookieIndex, host, errMsg, rc);</span>
+<span class="nc" id="L419">            super.logErrorAndReattemptRead(bookieIndex, host, errMsg, rc);</span>
 
-<span class="fc" id="L421">            int replica = writeSet.indexOf(bookieIndex);</span>
-<span class="pc bpc" id="L422" title="1 of 2 branches missed.">            if (replica == NOT_FOUND) {</span>
+<span class="nc" id="L421">            int replica = writeSet.indexOf(bookieIndex);</span>
+<span class="nc bnc" id="L422" title="All 2 branches missed.">            if (replica == NOT_FOUND) {</span>
 <span class="nc" id="L423">                LOG.error(&quot;Received error from a host which is not in the ensemble {} {}.&quot;, host, ensemble);</span>
 <span class="nc" id="L424">                return;</span>
             }
-<span class="fc" id="L426">            erroredReplicas.set(replica);</span>
+<span class="nc" id="L426">            erroredReplicas.set(replica);</span>
 
-<span class="pc bpc" id="L428" title="2 of 4 branches missed.">            if (isRecoveryRead &amp;&amp; (numBookiesMissingEntry &gt;= requiredBookiesMissingEntryForRecovery)) {</span>
+<span class="nc bnc" id="L428" title="All 4 branches missed.">            if (isRecoveryRead &amp;&amp; (numBookiesMissingEntry &gt;= requiredBookiesMissingEntryForRecovery)) {</span>
                 /* For recovery, report NoSuchEntry as soon as wQ-aQ+1 bookies report that they do not
                  * have the entry */
-<span class="fc" id="L431">                fail(BKException.Code.NoSuchEntryException);</span>
-<span class="fc" id="L432">                return;</span>
+<span class="nc" id="L431">                fail(BKException.Code.NoSuchEntryException);</span>
+<span class="nc" id="L432">                return;</span>
             }
 
 <span class="nc bnc" id="L435" title="All 2 branches missed.">            if (!readsOutstanding()) {</span>
@@ -458,22 +458,22 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
                   ClientContext clientCtx,
                   long startEntryId,
                   long endEntryId,
-<span class="fc" id="L461">                  boolean isRecoveryRead) {</span>
-<span class="fc" id="L462">        this.seq = new ArrayList&lt;&gt;((int) ((endEntryId + 1) - startEntryId));</span>
-<span class="fc" id="L463">        this.future = new CompletableFuture&lt;&gt;();</span>
-<span class="fc" id="L464">        this.lh = lh;</span>
-<span class="fc" id="L465">        this.clientCtx = clientCtx;</span>
-<span class="fc" id="L466">        this.startEntryId = startEntryId;</span>
-<span class="fc" id="L467">        this.endEntryId = endEntryId;</span>
-<span class="fc" id="L468">        this.isRecoveryRead = isRecoveryRead;</span>
+<span class="nc" id="L461">                  boolean isRecoveryRead) {</span>
+<span class="nc" id="L462">        this.seq = new ArrayList&lt;&gt;((int) ((endEntryId + 1) - startEntryId));</span>
+<span class="nc" id="L463">        this.future = new CompletableFuture&lt;&gt;();</span>
+<span class="nc" id="L464">        this.lh = lh;</span>
+<span class="nc" id="L465">        this.clientCtx = clientCtx;</span>
+<span class="nc" id="L466">        this.startEntryId = startEntryId;</span>
+<span class="nc" id="L467">        this.endEntryId = endEntryId;</span>
+<span class="nc" id="L468">        this.isRecoveryRead = isRecoveryRead;</span>
 
-<span class="fc" id="L470">        this.allowFailFast = false;</span>
-<span class="fc" id="L471">        numPendingEntries = endEntryId - startEntryId + 1;</span>
-<span class="fc" id="L472">        requiredBookiesMissingEntryForRecovery = getLedgerMetadata().getWriteQuorumSize()</span>
-<span class="fc" id="L473">                - getLedgerMetadata().getAckQuorumSize() + 1;</span>
-<span class="fc" id="L474">        heardFromHosts = new HashSet&lt;&gt;();</span>
-<span class="fc" id="L475">        heardFromHostsBitSet = new BitSet(getLedgerMetadata().getEnsembleSize());</span>
-<span class="fc" id="L476">    }</span>
+<span class="nc" id="L470">        this.allowFailFast = false;</span>
+<span class="nc" id="L471">        numPendingEntries = endEntryId - startEntryId + 1;</span>
+<span class="nc" id="L472">        requiredBookiesMissingEntryForRecovery = getLedgerMetadata().getWriteQuorumSize()</span>
+<span class="nc" id="L473">                - getLedgerMetadata().getAckQuorumSize() + 1;</span>
+<span class="nc" id="L474">        heardFromHosts = new HashSet&lt;&gt;();</span>
+<span class="nc" id="L475">        heardFromHostsBitSet = new BitSet(getLedgerMetadata().getEnsembleSize());</span>
+<span class="nc" id="L476">    }</span>
 
     CompletableFuture&lt;LedgerEntries&gt; future() {
 <span class="nc" id="L479">        return future;</span>
@@ -484,11 +484,11 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
     }
 
     protected void cancelSpeculativeTask(boolean mayInterruptIfRunning) {
-<span class="pc bpc" id="L487" title="1 of 2 branches missed.">        if (speculativeTask != null) {</span>
-<span class="fc" id="L488">            speculativeTask.cancel(mayInterruptIfRunning);</span>
-<span class="fc" id="L489">            speculativeTask = null;</span>
+<span class="nc bnc" id="L487" title="All 2 branches missed.">        if (speculativeTask != null) {</span>
+<span class="nc" id="L488">            speculativeTask.cancel(mayInterruptIfRunning);</span>
+<span class="nc" id="L489">            speculativeTask = null;</span>
         }
-<span class="fc" id="L491">    }</span>
+<span class="nc" id="L491">    }</span>
 
     public ScheduledFuture&lt;?&gt; getSpeculativeTask() {
 <span class="nc" id="L494">        return speculativeTask;</span>
@@ -508,32 +508,32 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
 <span class="nc" id="L508">    }</span>
 
     void initiate() {
-<span class="fc" id="L511">        long nextEnsembleChange = startEntryId, i = startEntryId;</span>
-<span class="fc" id="L512">        this.requestTimeNanos = MathUtils.nowInNano();</span>
-<span class="fc" id="L513">        List&lt;BookieSocketAddress&gt; ensemble = null;</span>
+<span class="nc" id="L511">        long nextEnsembleChange = startEntryId, i = startEntryId;</span>
+<span class="nc" id="L512">        this.requestTimeNanos = MathUtils.nowInNano();</span>
+<span class="nc" id="L513">        List&lt;BookieSocketAddress&gt; ensemble = null;</span>
         do {
-<span class="pc bpc" id="L515" title="1 of 2 branches missed.">            if (i == nextEnsembleChange) {</span>
-<span class="fc" id="L516">                ensemble = getLedgerMetadata().getEnsembleAt(i);</span>
-<span class="fc" id="L517">                nextEnsembleChange = LedgerMetadataUtils.getNextEnsembleChange(getLedgerMetadata(), i);</span>
+<span class="nc bnc" id="L515" title="All 2 branches missed.">            if (i == nextEnsembleChange) {</span>
+<span class="nc" id="L516">                ensemble = getLedgerMetadata().getEnsembleAt(i);</span>
+<span class="nc" id="L517">                nextEnsembleChange = LedgerMetadataUtils.getNextEnsembleChange(getLedgerMetadata(), i);</span>
             }
             LedgerEntryRequest entry;
-<span class="pc bpc" id="L520" title="1 of 2 branches missed.">            if (parallelRead) {</span>
+<span class="nc bnc" id="L520" title="All 2 branches missed.">            if (parallelRead) {</span>
 <span class="nc" id="L521">                entry = new ParallelReadRequest(ensemble, lh.ledgerId, i);</span>
             } else {
-<span class="fc" id="L523">                entry = new SequenceReadRequest(ensemble, lh.ledgerId, i);</span>
+<span class="nc" id="L523">                entry = new SequenceReadRequest(ensemble, lh.ledgerId, i);</span>
             }
-<span class="fc" id="L525">            seq.add(entry);</span>
-<span class="fc" id="L526">            i++;</span>
-<span class="pc bpc" id="L527" title="1 of 2 branches missed.">        } while (i &lt;= endEntryId);</span>
+<span class="nc" id="L525">            seq.add(entry);</span>
+<span class="nc" id="L526">            i++;</span>
+<span class="nc bnc" id="L527" title="All 2 branches missed.">        } while (i &lt;= endEntryId);</span>
         // read the entries.
-<span class="fc bfc" id="L529" title="All 2 branches covered.">        for (LedgerEntryRequest entry : seq) {</span>
-<span class="fc" id="L530">            entry.read();</span>
-<span class="pc bpc" id="L531" title="2 of 4 branches missed.">            if (!parallelRead &amp;&amp; clientCtx.getConf().readSpeculativeRequestPolicy.isPresent()) {</span>
-<span class="fc" id="L532">                speculativeTask = clientCtx.getConf().readSpeculativeRequestPolicy.get()</span>
-<span class="fc" id="L533">                    .initiateSpeculativeRequest(clientCtx.getScheduler(), entry);</span>
+<span class="nc bnc" id="L529" title="All 2 branches missed.">        for (LedgerEntryRequest entry : seq) {</span>
+<span class="nc" id="L530">            entry.read();</span>
+<span class="nc bnc" id="L531" title="All 4 branches missed.">            if (!parallelRead &amp;&amp; clientCtx.getConf().readSpeculativeRequestPolicy.isPresent()) {</span>
+<span class="nc" id="L532">                speculativeTask = clientCtx.getConf().readSpeculativeRequestPolicy.get()</span>
+<span class="nc" id="L533">                    .initiateSpeculativeRequest(clientCtx.getScheduler(), entry);</span>
             }
-<span class="fc" id="L535">        }</span>
-<span class="fc" id="L536">    }</span>
+<span class="nc" id="L535">        }</span>
+<span class="nc" id="L536">    }</span>
 
     @Override
     public void safeRun() {
@@ -544,13 +544,13 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
         final int bookieIndex;
         final BookieSocketAddress to;
         final LedgerEntryRequest entry;
-<span class="fc" id="L547">        long lac = LedgerHandle.INVALID_ENTRY_ID;</span>
+<span class="nc" id="L547">        long lac = LedgerHandle.INVALID_ENTRY_ID;</span>
 
-<span class="fc" id="L549">        ReadContext(int bookieIndex, BookieSocketAddress to, LedgerEntryRequest entry) {</span>
-<span class="fc" id="L550">            this.bookieIndex = bookieIndex;</span>
-<span class="fc" id="L551">            this.to = to;</span>
-<span class="fc" id="L552">            this.entry = entry;</span>
-<span class="fc" id="L553">        }</span>
+<span class="nc" id="L549">        ReadContext(int bookieIndex, BookieSocketAddress to, LedgerEntryRequest entry) {</span>
+<span class="nc" id="L550">            this.bookieIndex = bookieIndex;</span>
+<span class="nc" id="L551">            this.to = to;</span>
+<span class="nc" id="L552">            this.entry = entry;</span>
+<span class="nc" id="L553">        }</span>
 
         @Override
         public void setLastAddConfirmed(long lac) {
@@ -564,23 +564,23 @@ class PendingReadOp implements ReadEntryCallback, SafeRunnable {
     }
 
     void sendReadTo(int bookieIndex, BookieSocketAddress to, LedgerEntryRequest entry) throws InterruptedException {
-<span class="pc bpc" id="L567" title="1 of 2 branches missed.">        if (lh.throttler != null) {</span>
-<span class="fc" id="L568">            lh.throttler.acquire();</span>
+<span class="nc bnc" id="L567" title="All 2 branches missed.">        if (lh.throttler != null) {</span>
+<span class="nc" id="L568">            lh.throttler.acquire();</span>
         }
 
-<span class="pc bpc" id="L571" title="1 of 2 branches missed.">        int flags = isRecoveryRead ? BookieProtocol.FLAG_HIGH_PRIORITY : BookieProtocol.FLAG_NONE;</span>
-<span class="fc" id="L572">        clientCtx.getBookieClient().readEntry(to, lh.ledgerId, entry.eId,</span>
+<span class="nc bnc" id="L571" title="All 2 branches missed.">        int flags = isRecoveryRead ? BookieProtocol.FLAG_HIGH_PRIORITY : BookieProtocol.FLAG_NONE;</span>
+<span class="nc" id="L572">        clientCtx.getBookieClient().readEntry(to, lh.ledgerId, entry.eId,</span>
                                               this, new ReadContext(bookieIndex, to, entry), flags);
-<span class="fc" id="L574">    }</span>
+<span class="nc" id="L574">    }</span>
 
     @Override
     public void readEntryComplete(int rc, long ledgerId, final long entryId, final ByteBuf buffer, Object ctx) {
-<span class="fc" id="L578">        final ReadContext rctx = (ReadContext) ctx;</span>
-<span class="fc" id="L579">        final LedgerEntryRequest entry = rctx.entry;</span>
+<span class="nc" id="L578">        final ReadContext rctx = (ReadContext) ctx;</span>
+<span class="nc" id="L579">        final LedgerEntryRequest entry = rctx.entry;</span>
 
-<span class="pc bpc" id="L581" title="1 of 2 branches missed.">        if (rc != BKException.Code.OK) {</span>
-<span class="fc" id="L582">            entry.logErrorAndReattemptRead(rctx.bookieIndex, rctx.to, &quot;Error: &quot; + BKException.getMessage(rc), rc);</span>
-<span class="fc" id="L583">            return;</span>
+<span class="nc bnc" id="L581" title="All 2 branches missed.">        if (rc != BKException.Code.OK) {</span>
+<span class="nc" id="L582">            entry.logErrorAndReattemptRead(rctx.bookieIndex, rctx.to, &quot;Error: &quot; + BKException.getMessage(rc), rc);</span>
+<span class="nc" id="L583">            return;</span>
         }
 
 <span class="nc" id="L586">        heardFromHosts.add(rctx.to);</span>

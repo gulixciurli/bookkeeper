@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookKeeperClientStatsImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myBookkeeperOpenLedgerTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client.impl</a> &gt; <span class="el_source">BookKeeperClientStatsImpl.java</span></div><h1>BookKeeperClientStatsImpl.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookKeeperClientStatsImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$MyLedgerEntriesImplTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client.impl</a> &gt; <span class="el_source">BookKeeperClientStatsImpl.java</span></div><h1>BookKeeperClientStatsImpl.java</h1><pre class="source lang-java linenums">/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -160,57 +160,57 @@ public class BookKeeperClientStatsImpl implements BookKeeperClientStats {
     private final Counter writeTimedOutDueToNotEnoughFaultDomains;
 
 
-<span class="fc" id="L163">    public BookKeeperClientStatsImpl(StatsLogger stats) {</span>
-<span class="fc" id="L164">        this.stats = stats;</span>
-<span class="fc" id="L165">        this.createOpLogger = stats.getOpStatsLogger(CREATE_OP);</span>
-<span class="fc" id="L166">        this.deleteOpLogger = stats.getOpStatsLogger(DELETE_OP);</span>
-<span class="fc" id="L167">        this.openOpLogger = stats.getOpStatsLogger(OPEN_OP);</span>
-<span class="fc" id="L168">        this.recoverOpLogger = stats.getOpStatsLogger(RECOVER_OP);</span>
-<span class="fc" id="L169">        this.readOpLogger = stats.getOpStatsLogger(READ_OP);</span>
-<span class="fc" id="L170">        this.readOpDmCounter = stats.getCounter(READ_OP_DM);</span>
-<span class="fc" id="L171">        this.readLacAndEntryOpLogger = stats.getOpStatsLogger(READ_LAST_CONFIRMED_AND_ENTRY);</span>
-<span class="fc" id="L172">        this.readLacAndEntryRespLogger = stats.getOpStatsLogger(READ_LAST_CONFIRMED_AND_ENTRY_RESPONSE);</span>
-<span class="fc" id="L173">        this.addOpLogger = stats.getOpStatsLogger(ADD_OP);</span>
-<span class="fc" id="L174">        this.forceOpLogger = stats.getOpStatsLogger(FORCE_OP);</span>
-<span class="fc" id="L175">        this.addOpUrCounter = stats.getCounter(ADD_OP_UR);</span>
-<span class="fc" id="L176">        this.writeLacOpLogger = stats.getOpStatsLogger(WRITE_LAC_OP);</span>
-<span class="fc" id="L177">        this.readLacOpLogger = stats.getOpStatsLogger(READ_LAC_OP);</span>
-<span class="fc" id="L178">        this.recoverAddEntriesStats = stats.getOpStatsLogger(LEDGER_RECOVER_ADD_ENTRIES);</span>
-<span class="fc" id="L179">        this.recoverReadEntriesStats = stats.getOpStatsLogger(LEDGER_RECOVER_READ_ENTRIES);</span>
+<span class="nc" id="L163">    public BookKeeperClientStatsImpl(StatsLogger stats) {</span>
+<span class="nc" id="L164">        this.stats = stats;</span>
+<span class="nc" id="L165">        this.createOpLogger = stats.getOpStatsLogger(CREATE_OP);</span>
+<span class="nc" id="L166">        this.deleteOpLogger = stats.getOpStatsLogger(DELETE_OP);</span>
+<span class="nc" id="L167">        this.openOpLogger = stats.getOpStatsLogger(OPEN_OP);</span>
+<span class="nc" id="L168">        this.recoverOpLogger = stats.getOpStatsLogger(RECOVER_OP);</span>
+<span class="nc" id="L169">        this.readOpLogger = stats.getOpStatsLogger(READ_OP);</span>
+<span class="nc" id="L170">        this.readOpDmCounter = stats.getCounter(READ_OP_DM);</span>
+<span class="nc" id="L171">        this.readLacAndEntryOpLogger = stats.getOpStatsLogger(READ_LAST_CONFIRMED_AND_ENTRY);</span>
+<span class="nc" id="L172">        this.readLacAndEntryRespLogger = stats.getOpStatsLogger(READ_LAST_CONFIRMED_AND_ENTRY_RESPONSE);</span>
+<span class="nc" id="L173">        this.addOpLogger = stats.getOpStatsLogger(ADD_OP);</span>
+<span class="nc" id="L174">        this.forceOpLogger = stats.getOpStatsLogger(FORCE_OP);</span>
+<span class="nc" id="L175">        this.addOpUrCounter = stats.getCounter(ADD_OP_UR);</span>
+<span class="nc" id="L176">        this.writeLacOpLogger = stats.getOpStatsLogger(WRITE_LAC_OP);</span>
+<span class="nc" id="L177">        this.readLacOpLogger = stats.getOpStatsLogger(READ_LAC_OP);</span>
+<span class="nc" id="L178">        this.recoverAddEntriesStats = stats.getOpStatsLogger(LEDGER_RECOVER_ADD_ENTRIES);</span>
+<span class="nc" id="L179">        this.recoverReadEntriesStats = stats.getOpStatsLogger(LEDGER_RECOVER_READ_ENTRIES);</span>
 
-<span class="fc" id="L181">        this.ensembleChangeCounter = stats.getCounter(ENSEMBLE_CHANGES);</span>
-<span class="fc" id="L182">        this.lacUpdateHitsCounter = stats.getCounter(LAC_UPDATE_HITS);</span>
-<span class="fc" id="L183">        this.lacUpdateMissesCounter = stats.getCounter(LAC_UPDATE_MISSES);</span>
-<span class="fc" id="L184">        this.clientChannelWriteWaitStats = stats.getOpStatsLogger(CLIENT_CHANNEL_WRITE_WAIT);</span>
+<span class="nc" id="L181">        this.ensembleChangeCounter = stats.getCounter(ENSEMBLE_CHANGES);</span>
+<span class="nc" id="L182">        this.lacUpdateHitsCounter = stats.getCounter(LAC_UPDATE_HITS);</span>
+<span class="nc" id="L183">        this.lacUpdateMissesCounter = stats.getCounter(LAC_UPDATE_MISSES);</span>
+<span class="nc" id="L184">        this.clientChannelWriteWaitStats = stats.getOpStatsLogger(CLIENT_CHANNEL_WRITE_WAIT);</span>
 
-<span class="fc" id="L186">        speculativeReadCounter = stats.getCounter(SPECULATIVE_READ_COUNT);</span>
+<span class="nc" id="L186">        speculativeReadCounter = stats.getCounter(SPECULATIVE_READ_COUNT);</span>
 
-<span class="fc" id="L188">        this.writeDelayedDueToNotEnoughFaultDomainsLatency =</span>
-<span class="fc" id="L189">                stats.getOpStatsLogger(WRITE_DELAYED_DUE_TO_NOT_ENOUGH_FAULT_DOMAINS_LATENCY);</span>
-<span class="fc" id="L190">        this.writeDelayedDueToNotEnoughFaultDomains = stats.getCounter(WRITE_DELAYED_DUE_TO_NOT_ENOUGH_FAULT_DOMAINS);</span>
-<span class="fc" id="L191">        this.writeTimedOutDueToNotEnoughFaultDomains =</span>
-<span class="fc" id="L192">                stats.getCounter(WRITE_TIMED_OUT_DUE_TO_NOT_ENOUGH_FAULT_DOMAINS);</span>
-<span class="fc" id="L193">    }</span>
+<span class="nc" id="L188">        this.writeDelayedDueToNotEnoughFaultDomainsLatency =</span>
+<span class="nc" id="L189">                stats.getOpStatsLogger(WRITE_DELAYED_DUE_TO_NOT_ENOUGH_FAULT_DOMAINS_LATENCY);</span>
+<span class="nc" id="L190">        this.writeDelayedDueToNotEnoughFaultDomains = stats.getCounter(WRITE_DELAYED_DUE_TO_NOT_ENOUGH_FAULT_DOMAINS);</span>
+<span class="nc" id="L191">        this.writeTimedOutDueToNotEnoughFaultDomains =</span>
+<span class="nc" id="L192">                stats.getCounter(WRITE_TIMED_OUT_DUE_TO_NOT_ENOUGH_FAULT_DOMAINS);</span>
+<span class="nc" id="L193">    }</span>
 
     @Override
     public OpStatsLogger getCreateOpLogger() {
-<span class="fc" id="L197">        return createOpLogger;</span>
+<span class="nc" id="L197">        return createOpLogger;</span>
     }
     @Override
     public OpStatsLogger getOpenOpLogger() {
-<span class="fc" id="L201">        return openOpLogger;</span>
+<span class="nc" id="L201">        return openOpLogger;</span>
     }
     @Override
     public OpStatsLogger getDeleteOpLogger() {
-<span class="fc" id="L205">        return deleteOpLogger;</span>
+<span class="nc" id="L205">        return deleteOpLogger;</span>
     }
     @Override
     public OpStatsLogger getRecoverOpLogger() {
-<span class="fc" id="L209">        return recoverOpLogger;</span>
+<span class="nc" id="L209">        return recoverOpLogger;</span>
     }
     @Override
     public OpStatsLogger getReadOpLogger() {
-<span class="fc" id="L213">        return readOpLogger;</span>
+<span class="nc" id="L213">        return readOpLogger;</span>
     }
     @Override
     public OpStatsLogger getReadLacAndEntryOpLogger() {
@@ -238,11 +238,11 @@ public class BookKeeperClientStatsImpl implements BookKeeperClientStats {
     }
     @Override
     public OpStatsLogger getRecoverAddCountLogger() {
-<span class="fc" id="L241">        return recoverAddEntriesStats;</span>
+<span class="nc" id="L241">        return recoverAddEntriesStats;</span>
     }
     @Override
     public OpStatsLogger getRecoverReadCountLogger() {
-<span class="fc" id="L245">        return recoverReadEntriesStats;</span>
+<span class="nc" id="L245">        return recoverReadEntriesStats;</span>
     }
     @Override
     public Counter getReadOpDmCounter() {
@@ -258,23 +258,23 @@ public class BookKeeperClientStatsImpl implements BookKeeperClientStats {
     }
     @Override
     public Counter getEnsembleChangeCounter() {
-<span class="fc" id="L261">        return ensembleChangeCounter;</span>
+<span class="nc" id="L261">        return ensembleChangeCounter;</span>
     }
     @Override
     public Counter getLacUpdateHitsCounter() {
-<span class="fc" id="L265">        return lacUpdateHitsCounter;</span>
+<span class="nc" id="L265">        return lacUpdateHitsCounter;</span>
     }
     @Override
     public Counter getLacUpdateMissesCounter() {
-<span class="fc" id="L269">        return lacUpdateMissesCounter;</span>
+<span class="nc" id="L269">        return lacUpdateMissesCounter;</span>
     }
     @Override
     public OpStatsLogger getClientChannelWriteWaitLogger() {
-<span class="fc" id="L273">        return clientChannelWriteWaitStats;</span>
+<span class="nc" id="L273">        return clientChannelWriteWaitStats;</span>
     }
     @Override
     public Counter getEnsembleBookieDistributionCounter(String bookie) {
-<span class="fc" id="L277">        return stats.getCounter(LEDGER_ENSEMBLE_BOOKIE_DISTRIBUTION + &quot;-&quot; + bookie);</span>
+<span class="nc" id="L277">        return stats.getCounter(LEDGER_ENSEMBLE_BOOKIE_DISTRIBUTION + &quot;-&quot; + bookie);</span>
     }
     @Override
     public OpStatsLogger getWriteDelayedDueToNotEnoughFaultDomainsLatency() {
@@ -290,7 +290,7 @@ public class BookKeeperClientStatsImpl implements BookKeeperClientStats {
     }
     @Override
     public void registerPendingAddsGauge(Gauge&lt;Integer&gt; gauge) {
-<span class="fc" id="L293">        stats.registerGauge(PENDING_ADDS, gauge);</span>
-<span class="fc" id="L294">    }</span>
+<span class="nc" id="L293">        stats.registerGauge(PENDING_ADDS, gauge);</span>
+<span class="nc" id="L294">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

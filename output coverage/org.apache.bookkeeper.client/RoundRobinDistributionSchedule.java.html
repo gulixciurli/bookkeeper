@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RoundRobinDistributionSchedule.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myBookkeeperOpenLedgerTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">RoundRobinDistributionSchedule.java</span></div><h1>RoundRobinDistributionSchedule.java</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RoundRobinDistributionSchedule.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$Bokkeeper2Test.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">RoundRobinDistributionSchedule.java</span></div><h1>RoundRobinDistributionSchedule.java</h1><pre class="source lang-java linenums">/**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -107,9 +107,9 @@ public class RoundRobinDistributionSchedule implements DistributionSchedule {
 <span class="fc" id="L107">        }</span>
 
         private void setSize(int newSize) {
-<span class="pc bpc" id="L110" title="1 of 2 branches missed.">            if (array == null) {</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">            if (array == null) {</span>
 <span class="fc" id="L111">                array = new int[newSize];</span>
-<span class="nc bnc" id="L112" title="All 2 branches missed.">            } else if (newSize &gt; array.length) {</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">            } else if (newSize &gt; array.length) {</span>
 <span class="nc" id="L113">                int[] newArray = new int[newSize];</span>
 <span class="nc" id="L114">                System.arraycopy(array, 0,</span>
                                  newArray, 0, array.length);
@@ -120,7 +120,7 @@ public class RoundRobinDistributionSchedule implements DistributionSchedule {
 
         @Override
         public int size() {
-<span class="nc" id="L123">            return size;</span>
+<span class="fc" id="L123">            return size;</span>
         }
 
         @Override
@@ -149,9 +149,9 @@ public class RoundRobinDistributionSchedule implements DistributionSchedule {
 
         @Override
         public int indexOf(int index) {
-<span class="pc bpc" id="L152" title="1 of 2 branches missed.">            for (int j = 0; j &lt; size; j++) {</span>
-<span class="pc bpc" id="L153" title="1 of 2 branches missed.">                if (array[j] == index) {</span>
-<span class="fc" id="L154">                    return j;</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            for (int j = 0; j &lt; size; j++) {</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">                if (array[j] == index) {</span>
+<span class="nc" id="L154">                    return j;</span>
                 }
             }
 <span class="nc" id="L157">            return -1;</span>
@@ -253,7 +253,7 @@ public class RoundRobinDistributionSchedule implements DistributionSchedule {
 
     @Override
     public AckSet getAckSet() {
-<span class="nc" id="L256">        return AckSetImpl.create(ensembleSize, writeQuorumSize, ackQuorumSize);</span>
+<span class="fc" id="L256">        return AckSetImpl.create(ensembleSize, writeQuorumSize, ackQuorumSize);</span>
     }
 
     @Override
@@ -264,47 +264,47 @@ public class RoundRobinDistributionSchedule implements DistributionSchedule {
     private static class AckSetImpl implements AckSet {
         private int writeQuorumSize;
         private int ackQuorumSize;
-<span class="nc" id="L267">        private final BitSet ackSet = new BitSet();</span>
+<span class="fc" id="L267">        private final BitSet ackSet = new BitSet();</span>
         // grows on reset()
-<span class="nc" id="L269">        private BookieSocketAddress[] failureMap = new BookieSocketAddress[0];</span>
+<span class="fc" id="L269">        private BookieSocketAddress[] failureMap = new BookieSocketAddress[0];</span>
 
         private final Handle&lt;AckSetImpl&gt; recyclerHandle;
-<span class="nc" id="L272">        private static final Recycler&lt;AckSetImpl&gt; RECYCLER = new Recycler&lt;AckSetImpl&gt;() {</span>
+<span class="fc" id="L272">        private static final Recycler&lt;AckSetImpl&gt; RECYCLER = new Recycler&lt;AckSetImpl&gt;() {</span>
             @Override
             protected AckSetImpl newObject(Recycler.Handle&lt;AckSetImpl&gt; handle) {
-<span class="nc" id="L275">                return new AckSetImpl(handle);</span>
+<span class="fc" id="L275">                return new AckSetImpl(handle);</span>
             }
         };
 
-<span class="nc" id="L279">        private AckSetImpl(Handle&lt;AckSetImpl&gt; recyclerHandle) {</span>
-<span class="nc" id="L280">            this.recyclerHandle = recyclerHandle;</span>
-<span class="nc" id="L281">        }</span>
+<span class="fc" id="L279">        private AckSetImpl(Handle&lt;AckSetImpl&gt; recyclerHandle) {</span>
+<span class="fc" id="L280">            this.recyclerHandle = recyclerHandle;</span>
+<span class="fc" id="L281">        }</span>
 
         static AckSetImpl create(int ensembleSize,
                                  int writeQuorumSize,
                                  int ackQuorumSize) {
-<span class="nc" id="L286">            AckSetImpl ackSet = RECYCLER.get();</span>
-<span class="nc" id="L287">            ackSet.reset(ensembleSize, writeQuorumSize, ackQuorumSize);</span>
-<span class="nc" id="L288">            return ackSet;</span>
+<span class="fc" id="L286">            AckSetImpl ackSet = RECYCLER.get();</span>
+<span class="fc" id="L287">            ackSet.reset(ensembleSize, writeQuorumSize, ackQuorumSize);</span>
+<span class="fc" id="L288">            return ackSet;</span>
         }
 
         private void reset(int ensembleSize,
                            int writeQuorumSize,
                            int ackQuorumSize) {
-<span class="nc" id="L294">            this.ackQuorumSize = ackQuorumSize;</span>
-<span class="nc" id="L295">            this.writeQuorumSize = writeQuorumSize;</span>
-<span class="nc" id="L296">            ackSet.clear();</span>
-<span class="nc bnc" id="L297" title="All 2 branches missed.">            if (failureMap.length &lt; ensembleSize) {</span>
-<span class="nc" id="L298">                failureMap = new BookieSocketAddress[ensembleSize];</span>
+<span class="fc" id="L294">            this.ackQuorumSize = ackQuorumSize;</span>
+<span class="fc" id="L295">            this.writeQuorumSize = writeQuorumSize;</span>
+<span class="fc" id="L296">            ackSet.clear();</span>
+<span class="pc bpc" id="L297" title="1 of 2 branches missed.">            if (failureMap.length &lt; ensembleSize) {</span>
+<span class="fc" id="L298">                failureMap = new BookieSocketAddress[ensembleSize];</span>
             }
-<span class="nc" id="L300">            Arrays.fill(failureMap, null);</span>
-<span class="nc" id="L301">        }</span>
+<span class="fc" id="L300">            Arrays.fill(failureMap, null);</span>
+<span class="fc" id="L301">        }</span>
 
         @Override
         public boolean completeBookieAndCheck(int bookieIndexHeardFrom) {
-<span class="nc" id="L305">            failureMap[bookieIndexHeardFrom] = null;</span>
-<span class="nc" id="L306">            ackSet.set(bookieIndexHeardFrom);</span>
-<span class="nc bnc" id="L307" title="All 2 branches missed.">            return ackSet.cardinality() &gt;= ackQuorumSize;</span>
+<span class="fc" id="L305">            failureMap[bookieIndexHeardFrom] = null;</span>
+<span class="fc" id="L306">            ackSet.set(bookieIndexHeardFrom);</span>
+<span class="fc bfc" id="L307" title="All 2 branches covered.">            return ackSet.cardinality() &gt;= ackQuorumSize;</span>
         }
 
         @Override
@@ -335,8 +335,8 @@ public class RoundRobinDistributionSchedule implements DistributionSchedule {
 
         @Override
         public void recycle() {
-<span class="nc" id="L338">            recyclerHandle.recycle(this);</span>
-<span class="nc" id="L339">        }</span>
+<span class="fc" id="L338">            recyclerHandle.recycle(this);</span>
+<span class="fc" id="L339">        }</span>
 
         @Override
         public String toString() {
@@ -358,44 +358,44 @@ public class RoundRobinDistributionSchedule implements DistributionSchedule {
     }
 
     private class RRQuorumCoverageSet implements QuorumCoverageSet {
-<span class="fc" id="L361">        private final int[] covered = new int[ensembleSize];</span>
+<span class="nc" id="L361">        private final int[] covered = new int[ensembleSize];</span>
 
-<span class="fc" id="L363">        private RRQuorumCoverageSet() {</span>
-<span class="fc bfc" id="L364" title="All 2 branches covered.">            for (int i = 0; i &lt; covered.length; i++) {</span>
-<span class="fc" id="L365">                covered[i] = BKException.Code.UNINITIALIZED;</span>
+<span class="nc" id="L363">        private RRQuorumCoverageSet() {</span>
+<span class="nc bnc" id="L364" title="All 2 branches missed.">            for (int i = 0; i &lt; covered.length; i++) {</span>
+<span class="nc" id="L365">                covered[i] = BKException.Code.UNINITIALIZED;</span>
             }
-<span class="fc" id="L367">        }</span>
+<span class="nc" id="L367">        }</span>
 
         @Override
         public synchronized void addBookie(int bookieIndexHeardFrom, int rc) {
-<span class="fc" id="L371">            covered[bookieIndexHeardFrom] = rc;</span>
-<span class="fc" id="L372">        }</span>
+<span class="nc" id="L371">            covered[bookieIndexHeardFrom] = rc;</span>
+<span class="nc" id="L372">        }</span>
 
         @Override
         public synchronized boolean checkCovered() {
             // now check if there are any write quorums, with |ackQuorum| nodes available
-<span class="fc bfc" id="L377" title="All 2 branches covered.">            for (int i = 0; i &lt; ensembleSize; i++) {</span>
+<span class="nc bnc" id="L377" title="All 2 branches missed.">            for (int i = 0; i &lt; ensembleSize; i++) {</span>
                 /* Nodes which have either responded with an error other than NoSuch{Entry,Ledger},
                    or have not responded at all. We cannot know if these nodes ever accepted a entry. */
-<span class="fc" id="L380">                int nodesUnknown = 0;</span>
+<span class="nc" id="L380">                int nodesUnknown = 0;</span>
 
-<span class="fc bfc" id="L382" title="All 2 branches covered.">                for (int j = 0; j &lt; writeQuorumSize; j++) {</span>
-<span class="fc" id="L383">                    int nodeIndex = (i + j) % ensembleSize;</span>
-<span class="pc bpc" id="L384" title="2 of 6 branches missed.">                    if (covered[nodeIndex] != BKException.Code.OK</span>
+<span class="nc bnc" id="L382" title="All 2 branches missed.">                for (int j = 0; j &lt; writeQuorumSize; j++) {</span>
+<span class="nc" id="L383">                    int nodeIndex = (i + j) % ensembleSize;</span>
+<span class="nc bnc" id="L384" title="All 6 branches missed.">                    if (covered[nodeIndex] != BKException.Code.OK</span>
                         &amp;&amp; covered[nodeIndex] != BKException.Code.NoSuchEntryException
                         &amp;&amp; covered[nodeIndex] != BKException.Code.NoSuchLedgerExistsException) {
-<span class="fc" id="L387">                        nodesUnknown++;</span>
+<span class="nc" id="L387">                        nodesUnknown++;</span>
                     }
                 }
 
                 /* If nodesUnknown is greater than the ack quorum size, then
                    it is possible those two unknown nodes accepted an entry which
                    we do not know about */
-<span class="fc bfc" id="L394" title="All 2 branches covered.">                if (nodesUnknown &gt;= ackQuorumSize) {</span>
-<span class="fc" id="L395">                    return false;</span>
+<span class="nc bnc" id="L394" title="All 2 branches missed.">                if (nodesUnknown &gt;= ackQuorumSize) {</span>
+<span class="nc" id="L395">                    return false;</span>
                 }
             }
-<span class="fc" id="L398">            return true;</span>
+<span class="nc" id="L398">            return true;</span>
         }
 
         @Override
@@ -416,7 +416,7 @@ public class RoundRobinDistributionSchedule implements DistributionSchedule {
 
     @Override
     public QuorumCoverageSet getCoverageSet() {
-<span class="fc" id="L419">        return new RRQuorumCoverageSet();</span>
+<span class="nc" id="L419">        return new RRQuorumCoverageSet();</span>
     }
 
     @Override

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LedgerMetadataBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myBookkeeperOpenLedgerTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">LedgerMetadataBuilder.java</span></div><h1>LedgerMetadataBuilder.java</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LedgerMetadataBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$Bokkeeper2Test.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">LedgerMetadataBuilder.java</span></div><h1>LedgerMetadataBuilder.java</h1><pre class="source lang-java linenums">/**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -101,8 +101,8 @@ import org.apache.bookkeeper.net.BookieSocketAddress;
     }
 
     public LedgerMetadataBuilder withMetadataFormatVersion(int version) {
-<span class="fc" id="L104">        this.metadataFormatVersion = version;</span>
-<span class="fc" id="L105">        return this;</span>
+<span class="nc" id="L104">        this.metadataFormatVersion = version;</span>
+<span class="nc" id="L105">        return this;</span>
     }
 
     public LedgerMetadataBuilder withPassword(byte[] password) {
@@ -150,23 +150,23 @@ import org.apache.bookkeeper.net.BookieSocketAddress;
     }
 
     public LedgerMetadataBuilder withInRecoveryState() {
-<span class="fc" id="L153">        this.state = State.IN_RECOVERY;</span>
-<span class="fc" id="L154">        return this;</span>
+<span class="nc" id="L153">        this.state = State.IN_RECOVERY;</span>
+<span class="nc" id="L154">        return this;</span>
     }
 
     public LedgerMetadataBuilder withClosedState() {
-<span class="fc" id="L158">        this.state = State.CLOSED;</span>
-<span class="fc" id="L159">        return this;</span>
+<span class="nc" id="L158">        this.state = State.CLOSED;</span>
+<span class="nc" id="L159">        return this;</span>
     }
 
     public LedgerMetadataBuilder withLastEntryId(long lastEntryId) {
-<span class="fc" id="L163">        this.lastEntryId = Optional.of(lastEntryId);</span>
-<span class="fc" id="L164">        return this;</span>
+<span class="nc" id="L163">        this.lastEntryId = Optional.of(lastEntryId);</span>
+<span class="nc" id="L164">        return this;</span>
     }
 
     public LedgerMetadataBuilder withLength(long length) {
-<span class="fc" id="L168">        this.length = Optional.of(length);</span>
-<span class="fc" id="L169">        return this;</span>
+<span class="nc" id="L168">        this.length = Optional.of(length);</span>
+<span class="nc" id="L169">        return this;</span>
     }
 
     public LedgerMetadataBuilder withCustomMetadata(Map&lt;String, byte[]&gt; customMetadata) {
@@ -175,13 +175,13 @@ import org.apache.bookkeeper.net.BookieSocketAddress;
     }
 
     public LedgerMetadataBuilder withCreationTime(long ctime) {
-<span class="fc" id="L178">        this.ctime = ctime;</span>
-<span class="fc" id="L179">        return this;</span>
+<span class="nc" id="L178">        this.ctime = ctime;</span>
+<span class="nc" id="L179">        return this;</span>
     }
 
     public LedgerMetadataBuilder storingCreationTime(boolean storing) {
-<span class="fc" id="L183">        this.storeCtime = storing;</span>
-<span class="fc" id="L184">        return this;</span>
+<span class="nc" id="L183">        this.storeCtime = storing;</span>
+<span class="nc" id="L184">        return this;</span>
     }
 
     public LedgerMetadataBuilder withCToken(long cToken) {

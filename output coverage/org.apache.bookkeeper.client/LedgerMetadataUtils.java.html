@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LedgerMetadataUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myBookkeeperOpenLedgerTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">LedgerMetadataUtils.java</span></div><h1>LedgerMetadataUtils.java</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LedgerMetadataUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$Bokkeeper2Test.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">LedgerMetadataUtils.java</span></div><h1>LedgerMetadataUtils.java</h1><pre class="source lang-java linenums">/**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -46,10 +46,10 @@ import org.slf4j.LoggerFactory;
      * @return the entry id of the next ensemble change (-1 if no further ensemble changes)
      */
     static long getNextEnsembleChange(LedgerMetadata metadata, long entryId) {
-<span class="fc" id="L49">        SortedMap&lt;Long, ? extends List&lt;BookieSocketAddress&gt;&gt; tailMap = metadata.getAllEnsembles().tailMap(entryId + 1);</span>
+<span class="nc" id="L49">        SortedMap&lt;Long, ? extends List&lt;BookieSocketAddress&gt;&gt; tailMap = metadata.getAllEnsembles().tailMap(entryId + 1);</span>
 
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (tailMap.isEmpty()) {</span>
-<span class="fc" id="L52">            return -1;</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (tailMap.isEmpty()) {</span>
+<span class="nc" id="L52">            return -1;</span>
         } else {
 <span class="nc" id="L54">            return tailMap.firstKey();</span>
         }
@@ -69,8 +69,8 @@ import org.slf4j.LoggerFactory;
     }
 
     static Long getLastEnsembleKey(LedgerMetadata metadata) {
-<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        checkArgument(!metadata.getAllEnsembles().isEmpty(), &quot;Metadata should never be created with no ensembles&quot;);</span>
-<span class="fc" id="L73">        return metadata.getAllEnsembles().lastKey();</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        checkArgument(!metadata.getAllEnsembles().isEmpty(), &quot;Metadata should never be created with no ensembles&quot;);</span>
+<span class="nc" id="L73">        return metadata.getAllEnsembles().lastKey();</span>
     }
 
     public static boolean shouldStoreCtime(LedgerMetadata metadata) {

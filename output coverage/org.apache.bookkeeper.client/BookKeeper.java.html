@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookKeeper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myBookkeeperOpenLedgerTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">BookKeeper.java</span></div><h1>BookKeeper.java</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookKeeper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$Bokkeeper2Test.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client</a> &gt; <span class="el_source">BookKeeper.java</span></div><h1>BookKeeper.java</h1><pre class="source lang-java linenums">/**
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -333,17 +333,17 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
      */
     public BookKeeper(final ClientConfiguration conf)
             throws IOException, InterruptedException, BKException {
-<span class="fc" id="L336">        this(conf, null, null, null, NullStatsLogger.INSTANCE,</span>
+<span class="nc" id="L336">        this(conf, null, null, null, NullStatsLogger.INSTANCE,</span>
                 null, null, null);
-<span class="fc" id="L338">    }</span>
+<span class="nc" id="L338">    }</span>
 
     private static ZooKeeper validateZooKeeper(ZooKeeper zk) throws NullPointerException, IOException {
-<span class="nc" id="L341">        checkNotNull(zk, &quot;No zookeeper instance provided&quot;);</span>
-<span class="nc bnc" id="L342" title="All 2 branches missed.">        if (!zk.getState().isConnected()) {</span>
+<span class="fc" id="L341">        checkNotNull(zk, &quot;No zookeeper instance provided&quot;);</span>
+<span class="pc bpc" id="L342" title="1 of 2 branches missed.">        if (!zk.getState().isConnected()) {</span>
 <span class="nc" id="L343">            LOG.error(&quot;Unconnected zookeeper handle passed to bookkeeper&quot;);</span>
 <span class="nc" id="L344">            throw new IOException(KeeperException.create(KeeperException.Code.CONNECTIONLOSS));</span>
         }
-<span class="nc" id="L346">        return zk;</span>
+<span class="fc" id="L346">        return zk;</span>
     }
 
     private static EventLoopGroup validateEventLoopGroup(EventLoopGroup eventLoopGroup)
@@ -367,8 +367,8 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
      */
     public BookKeeper(ClientConfiguration conf, ZooKeeper zk)
             throws IOException, InterruptedException, BKException {
-<span class="nc" id="L370">        this(conf, validateZooKeeper(zk), null, null, NullStatsLogger.INSTANCE, null, null, null);</span>
-<span class="nc" id="L371">    }</span>
+<span class="fc" id="L370">        this(conf, validateZooKeeper(zk), null, null, NullStatsLogger.INSTANCE, null, null, null);</span>
+<span class="fc" id="L371">    }</span>
 
     /**
      * Create a bookkeeper client but use the passed in zookeeper client and
@@ -650,7 +650,7 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
 
     @VisibleForTesting
     OrderedScheduler getScheduler() {
-<span class="fc" id="L653">        return scheduler;</span>
+<span class="nc" id="L653">        return scheduler;</span>
     }
 
     @VisibleForTesting
@@ -680,11 +680,11 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
 <span class="fc" id="L680">        MAC, CRC32, CRC32C, DUMMY;</span>
 
         public static DigestType fromApiDigestType(org.apache.bookkeeper.client.api.DigestType digestType) {
-<span class="pc bpc" id="L683" title="4 of 5 branches missed.">            switch (digestType) {</span>
+<span class="nc bnc" id="L683" title="All 5 branches missed.">            switch (digestType) {</span>
                 case MAC:
 <span class="nc" id="L685">                    return DigestType.MAC;</span>
                 case CRC32:
-<span class="fc" id="L687">                    return DigestType.CRC32;</span>
+<span class="nc" id="L687">                    return DigestType.CRC32;</span>
                 case CRC32C:
 <span class="nc" id="L689">                    return DigestType.CRC32C;</span>
                 case DUMMY:
@@ -857,7 +857,7 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
      */
     public LedgerHandle createLedger(DigestType digestType, byte[] passwd)
             throws BKException, InterruptedException {
-<span class="fc" id="L860">        return createLedger(3, 2, digestType, passwd);</span>
+<span class="nc" id="L860">        return createLedger(3, 2, digestType, passwd);</span>
     }
 
     /**
@@ -1177,18 +1177,18 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
      */
     public void asyncOpenLedger(final long lId, final DigestType digestType, final byte[] passwd,
                                 final OpenCallback cb, final Object ctx) {
-<span class="fc" id="L1180">        closeLock.readLock().lock();</span>
+<span class="nc" id="L1180">        closeLock.readLock().lock();</span>
         try {
-<span class="fc bfc" id="L1182" title="All 2 branches covered.">            if (closed) {</span>
-<span class="fc" id="L1183">                cb.openComplete(BKException.Code.ClientClosedException, null, ctx);</span>
-<span class="fc" id="L1184">                return;</span>
+<span class="nc bnc" id="L1182" title="All 2 branches missed.">            if (closed) {</span>
+<span class="nc" id="L1183">                cb.openComplete(BKException.Code.ClientClosedException, null, ctx);</span>
+<span class="nc" id="L1184">                return;</span>
             }
-<span class="fc" id="L1186">            new LedgerOpenOp(BookKeeper.this, clientStats,</span>
-<span class="fc" id="L1187">                             lId, digestType, passwd, cb, ctx).initiate();</span>
+<span class="nc" id="L1186">            new LedgerOpenOp(BookKeeper.this, clientStats,</span>
+<span class="nc" id="L1187">                             lId, digestType, passwd, cb, ctx).initiate();</span>
         } finally {
-<span class="fc" id="L1189">            closeLock.readLock().unlock();</span>
+<span class="nc" id="L1189">            closeLock.readLock().unlock();</span>
         }
-<span class="fc" id="L1191">    }</span>
+<span class="nc" id="L1191">    }</span>
 
     /**
      * Open existing ledger asynchronously for reading, but it does not try to
@@ -1252,15 +1252,15 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
      */
     public LedgerHandle openLedger(long lId, DigestType digestType, byte[] passwd)
             throws BKException, InterruptedException {
-<span class="fc" id="L1255">        CompletableFuture&lt;LedgerHandle&gt; future = new CompletableFuture&lt;&gt;();</span>
-<span class="fc" id="L1256">        SyncOpenCallback result = new SyncOpenCallback(future);</span>
+<span class="nc" id="L1255">        CompletableFuture&lt;LedgerHandle&gt; future = new CompletableFuture&lt;&gt;();</span>
+<span class="nc" id="L1256">        SyncOpenCallback result = new SyncOpenCallback(future);</span>
 
         /*
          * Calls async open ledger
          */
-<span class="fc" id="L1261">        asyncOpenLedger(lId, digestType, passwd, result, null);</span>
+<span class="nc" id="L1261">        asyncOpenLedger(lId, digestType, passwd, result, null);</span>
 
-<span class="fc" id="L1263">        return SyncCallbackUtils.waitForResult(future);</span>
+<span class="nc" id="L1263">        return SyncCallbackUtils.waitForResult(future);</span>
     }
 
     /**
@@ -1304,15 +1304,15 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
     public void asyncDeleteLedger(final long lId, final DeleteCallback cb, final Object ctx) {
 <span class="fc" id="L1305">        closeLock.readLock().lock();</span>
         try {
-<span class="fc bfc" id="L1307" title="All 2 branches covered.">            if (closed) {</span>
+<span class="pc bpc" id="L1307" title="1 of 2 branches missed.">            if (closed) {</span>
 <span class="fc" id="L1308">                cb.deleteComplete(BKException.Code.ClientClosedException, ctx);</span>
 <span class="fc" id="L1309">                return;</span>
             }
-<span class="fc" id="L1311">            new LedgerDeleteOp(BookKeeper.this, clientStats, lId, cb, ctx).initiate();</span>
+<span class="nc" id="L1311">            new LedgerDeleteOp(BookKeeper.this, clientStats, lId, cb, ctx).initiate();</span>
         } finally {
 <span class="fc" id="L1313">            closeLock.readLock().unlock();</span>
         }
-<span class="fc" id="L1315">    }</span>
+<span class="nc" id="L1315">    }</span>
 
 
     /**
@@ -1330,8 +1330,8 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
         // Call asynchronous version
 <span class="fc" id="L1331">        asyncDeleteLedger(lId, result, null);</span>
 
-<span class="fc" id="L1333">        SyncCallbackUtils.waitForResult(future);</span>
-<span class="fc" id="L1334">    }</span>
+<span class="nc" id="L1333">        SyncCallbackUtils.waitForResult(future);</span>
+<span class="nc" id="L1334">    }</span>
 
     /**
      * Check asynchronously whether the ledger with identifier &lt;i&gt;lId&lt;/i&gt;
@@ -1470,7 +1470,7 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
 
             @Override
             public LedgerManager getLedgerManager() {
-<span class="fc" id="L1473">                return BookKeeper.this.getLedgerManager();</span>
+<span class="nc" id="L1473">                return BookKeeper.this.getLedgerManager();</span>
             }
 
             @Override
@@ -1490,12 +1490,12 @@ public class BookKeeper implements org.apache.bookkeeper.client.api.BookKeeper {
 
             @Override
             public OrderedExecutor getMainWorkerPool() {
-<span class="nc" id="L1493">                return BookKeeper.this.getMainWorkerPool();</span>
+<span class="fc" id="L1493">                return BookKeeper.this.getMainWorkerPool();</span>
             }
 
             @Override
             public OrderedScheduler getScheduler() {
-<span class="fc" id="L1498">                return BookKeeper.this.getScheduler();</span>
+<span class="nc" id="L1498">                return BookKeeper.this.getScheduler();</span>
             }
 
             @Override

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LedgerEntryImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$myBookkeeperOpenLedgerTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client.impl</a> &gt; <span class="el_source">LedgerEntryImpl.java</span></div><h1>LedgerEntryImpl.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LedgerEntryImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookkeeper$MyLedgerEntriesImplTest.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.bookkeeper.client.impl</a> &gt; <span class="el_source">LedgerEntryImpl.java</span></div><h1>LedgerEntryImpl.java</h1><pre class="source lang-java linenums">/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -41,22 +41,22 @@ public class LedgerEntryImpl implements LedgerEntry {
 
     public static LedgerEntryImpl create(long ledgerId,
                                          long entryId) {
-<span class="fc" id="L44">        LedgerEntryImpl entry = RECYCLER.get();</span>
-<span class="fc" id="L45">        entry.ledgerId = ledgerId;</span>
-<span class="fc" id="L46">        entry.entryId = entryId;</span>
-<span class="fc" id="L47">        return entry;</span>
+<span class="nc" id="L44">        LedgerEntryImpl entry = RECYCLER.get();</span>
+<span class="nc" id="L45">        entry.ledgerId = ledgerId;</span>
+<span class="nc" id="L46">        entry.entryId = entryId;</span>
+<span class="nc" id="L47">        return entry;</span>
     }
 
     public static LedgerEntryImpl create(long ledgerId,
                                          long entryId,
                                          long length,
                                          ByteBuf buf) {
-<span class="nc" id="L54">        LedgerEntryImpl entry = RECYCLER.get();</span>
-<span class="nc" id="L55">        entry.ledgerId = ledgerId;</span>
-<span class="nc" id="L56">        entry.entryId = entryId;</span>
-<span class="nc" id="L57">        entry.length = length;</span>
-<span class="nc" id="L58">        entry.entryBuf = buf;</span>
-<span class="nc" id="L59">        return entry;</span>
+<span class="fc" id="L54">        LedgerEntryImpl entry = RECYCLER.get();</span>
+<span class="fc" id="L55">        entry.ledgerId = ledgerId;</span>
+<span class="fc" id="L56">        entry.entryId = entryId;</span>
+<span class="fc" id="L57">        entry.length = length;</span>
+<span class="fc" id="L58">        entry.entryBuf = buf;</span>
+<span class="fc" id="L59">        return entry;</span>
     }
 
     public static LedgerEntryImpl duplicate(LedgerEntry entry) {
@@ -103,7 +103,7 @@ public class LedgerEntryImpl implements LedgerEntry {
      */
     @Override
     public long getEntryId() {
-<span class="nc" id="L106">        return entryId;</span>
+<span class="fc" id="L106">        return entryId;</span>
     }
 
     /**
@@ -151,16 +151,16 @@ public class LedgerEntryImpl implements LedgerEntry {
      */
     @Override
     public void close() {
-<span class="fc" id="L154">        recycle();</span>
-<span class="fc" id="L155">    }</span>
+<span class="nc" id="L154">        recycle();</span>
+<span class="nc" id="L155">    }</span>
 
     private void recycle() {
-<span class="fc" id="L158">        this.ledgerId = -1L;</span>
-<span class="fc" id="L159">        this.entryId = -1L;</span>
-<span class="fc" id="L160">        this.length = -1L;</span>
-<span class="fc" id="L161">        ReferenceCountUtil.release(entryBuf);</span>
-<span class="fc" id="L162">        this.entryBuf = null;</span>
-<span class="fc" id="L163">        recycleHandle.recycle(this);</span>
-<span class="fc" id="L164">    }</span>
+<span class="nc" id="L158">        this.ledgerId = -1L;</span>
+<span class="nc" id="L159">        this.entryId = -1L;</span>
+<span class="nc" id="L160">        this.length = -1L;</span>
+<span class="nc" id="L161">        ReferenceCountUtil.release(entryBuf);</span>
+<span class="nc" id="L162">        this.entryBuf = null;</span>
+<span class="nc" id="L163">        recycleHandle.recycle(this);</span>
+<span class="nc" id="L164">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
