@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.fail;
 
 /**
  * LedgerEntriesImpl Tester. 
@@ -26,7 +27,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 
 @RunWith(value = Parameterized.class)
-public class MyLedgerEntriesImplTest {
+public class MyLedgerEntriesImplGetTest {
     private final int entryNumber = 7;
     private LedgerEntriesImpl ledgerEntriesImpl;
     private final List<LedgerEntry> entryList = Lists.newArrayList();
@@ -41,7 +42,7 @@ public class MyLedgerEntriesImplTest {
     private boolean expectedResult;
 
 
-    public MyLedgerEntriesImplTest(boolean expectedResult, long entryId) {
+    public MyLedgerEntriesImplGetTest(boolean expectedResult, long entryId) {
         this.expectedResult = expectedResult;
         this.entryId = entryId;
 
@@ -64,6 +65,20 @@ public class MyLedgerEntriesImplTest {
 
     @After
     public void tearDown() throws Exception {
+        ledgerEntriesImpl.close();
+        try {
+            ledgerEntriesImpl.getEntry(entryId);
+            fail("should fail getEntry after close");
+        } catch (NullPointerException e) {
+            // expected behavior
+        }
+
+        try {
+            ledgerEntriesImpl.iterator();
+            fail("should fail iterator after close");
+        } catch (NullPointerException e) {
+            // expected behavior
+        }
     }
 
     @Parameterized.Parameters
